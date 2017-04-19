@@ -138,33 +138,20 @@ function candlestick(canvasId, data, left, right, chartType, dark, smaPeriod,
   var x, y, w, h, vScale, volScale, count = 0;
   var fibLowX, fibHighX;
   //trace(canvasId + ' w = ' + width + ', h = ' + height + ' ; d=' +dark);
-  if (dark) {
-    var borderColor = "#1f3232";
-    var wickColor = "#274141";
-    var textColor = "#6f9397";
-    var hLineColor = "#1f3232";
-    var vLineColor = "#1f3232";
-    var volumeColor = "#172a2c";
-    var greenColor = "#117e1a";
-    var redColor = "#7b1111";
-    var emaColor = "rgb(190,190,30)";
-    var ema2Color = "rgb(150,110,70)";
-    var smaColor = "rgba(70,120,230,0.7)";
-    var fibLineColor = "rgba(197,132,7,0.3)";
-  } else {
-    var borderColor = "#91abac";
-    var wickColor = "#223535";
-    var textColor = "#1e2324";
-    var hLineColor =  "#e9f0f0";
-    var vLineColor = "#e9f0f0";
-    var volumeColor = "#b5c8c9";
-    var greenColor = "#339349";
-    var redColor = "#a42015";
-    var emaColor = "rgb(210,200,130)";
-    var ema2Color = "rgb(200,150,230)";
-    var smaColor = "rgba(30,60,190,0.7)";
-    var fibLineColor = "rgba(175,100,100,0.75)";
-  }
+
+  // Colors:
+  var borderColor = "#91abac";
+  var wickColor = "#223535";
+  var textColor = "#1e2324";
+  var hLineColor =  "#e9f0f0";
+  var vLineColor = "#e9f0f0";
+  var volumeColor = "#b5c8c9";
+  var greenColor = "#339349";
+  var redColor = "#a42015";
+  var emaColor = "rgb(210,200,130)";
+  var ema2Color = "rgb(200,150,230)";
+  var smaColor = "rgba(30,60,190,0.7)";
+  var fibLineColor = "rgba(175,100,100,0.75)";
 
   if (right > 1) right = 1;
   if (left >= right)left = right - 0.001;
@@ -254,48 +241,9 @@ function candlestick(canvasId, data, left, right, chartType, dark, smaPeriod,
   var timestampCount = sticksPerTimestamp;
 
   // Draw vertical lines and dates
-  for (var i = start; i < end; i++) {
-    if (i < 0) continue;
-    if (!(data[i] instanceof Object)) {
-      delete data[i];
-      continue;
-    }
-    if (timestampCount == sticksPerTimestamp) {
-      timestampCount = 0;
-      var date = new Date(data[i].date * 1000);
-      dateString = month[date.getUTCMonth()] + " " + date.getUTCDate();
-      timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" +
-        ("0" + date.getUTCMinutes()).slice(-2);
-      ctx.fillStyle = vLineColor;
-      x = marginLeft + count * (candleWidth + candleSpacing) + (
-        candleWidth / 2);
-      y = 0;
-      w = 1;
-      h = height;
-      ctx.fillRect(x, y, w, h);
-      ctx.fillStyle = textColor;
-
-      var dateH =  height - dateMargin;
-      var timeH = dateH + 10*scaleFactor;
-      x -= 13 * scaleFactor;
-
-      if (alignYaxisRight) {
-        if (count > 0) {
-          ctx.fillText(dateString, x, dateH);
-          ctx.fillText(timeString, x, timeH);
-        }
-      } else {
-        // align y axis left
-
-        ctx.fillText(dateString, x, dateH);
-
-        ctx.fillText(timeString, x, timeH);
-      }
-
-    }
-    timestampCount++;
-    count++;
-  }
+  drawVerticalLines(ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
+    dateString, timeString, x, y, w, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
+    alignYaxisRight);
 
   if (alignYaxisRight) {
     // draw rightmost v line
@@ -478,190 +426,7 @@ function candlestick(canvasId, data, left, right, chartType, dark, smaPeriod,
   }
   ctx.strokeStyle = smaColor;
   if (showSma) ctx.stroke();
-  if (bollingerBand) {
-    ctx.beginPath();
-    ctx.moveTo(marginLeft, height - (bBand1[0] * vScale) + shft);
-    count = 0;
-    for (var i = 1; i < bBand1.length; i++) {
-      x = (count * candleWidth) + (count * candleSpacing);
-      ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (bBand1[
-          i] * vScale) + shft);
-      count++;
-    }
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(marginLeft, height - (bBand2[0] * vScale) + shft);
-    count = 0;
-    for (var i = 1; i < bBand2.length; i++) {
-      x = (count * candleWidth) + (count * candleSpacing);
-      ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (bBand2[
-          i] * vScale) + shft);
-      count++;
-    }
-    ctx.stroke();
-  }
-  // Ema2
-  if (showEma2) {
-    prevEmaEntry = 0;
-    for (var i = 0; i < start; i++) {
-      close = data[i].close;
-      if (prevEmaEntry == 0) prevEmaEntry = close;
-      emaEntry = (close * smooth2) + (prevEmaEntry * (1 - smooth2));
-      prevEmaEntry = emaEntry;
-    }
-    ctx.beginPath();
-    ctx.moveTo(marginLeft, height - (prevEmaEntry * vScale) + shft);
-    count = 0;
-    for (var i = start; i < end; i++) {
-      if (!(data[i] instanceof Object)) {
-        delete data[i];
-        continue;
-      }
-      close = data[i].close;
-      if (prevEmaEntry == 0){
-        prevEmaEntry = close;
-        ctx.moveTo(marginLeft, height - (prevEmaEntry * vScale) + shft);
-      }
-      x = (count * candleWidth) + (count * candleSpacing);
-      emaEntry = (close * smooth2) + (prevEmaEntry * (1 - smooth2));
-      prevEmaEntry = emaEntry;
-      ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (
-        emaEntry * vScale) + shft);
-      count++;
-    }
-    ctx.strokeStyle = ema2Color;
-    ctx.stroke();
-  }
 
-  // MACD
-  if (mobile){
-    ctx.beginPath();
-    ctx.moveTo(marginLeft, height - paddingBottom);
-    ctx.lineTo(c.width, height - paddingBottom);
-    ctx.strokeStyle = textColor;
-    ctx.stroke();
-  } else {
-    var macdData = [];
-    var macdRange = 0;
-    var startMacd = prevEma12Entry - prevEma26Entry;
-    var startSig = prevMacdEntry;
-    count = 0;
-
-    for (var i = start; i < end; i++){
-      close = data[i].close;
-
-      if (prevEma12Entry==0)prevEma12Entry = close;
-      ema12Entry = (close * ema12Smooth) + (prevEma12Entry * (1 - ema12Smooth));
-      prevEma12Entry = ema12Entry;
-
-      if (prevEma26Entry==0)prevEma26Entry = close;
-      ema26Entry = (close * ema26Smooth) + (prevEma26Entry * (1 - ema26Smooth));
-      prevEma26Entry = ema26Entry;
-
-      macdClose = ema12Entry - ema26Entry;
-      if (prevMacdEntry==0)prevMacdEntry = macdClose;
-      macdEntry = (macdClose * macdSmooth) + (prevMacdEntry * (1 - macdSmooth));
-      prevMacdEntry = macdEntry;
-
-      hist = macdClose-macdEntry;
-      macdData[i] = { "macd": macdClose,
-        "sig": macdEntry,
-        "hist": hist};
-
-      detectArray[count].macd = macdClose;
-      detectArray[count].sig = macdEntry;
-      detectArray[count].hist = hist;
-      count++;
-      macdRange = Math.max(macdRange,Math.abs(macdClose),Math.abs(macdEntry));
-    }
-    macdRange *= 1.1; // Padding
-    if (macdRange==0)macdRange=1;
-
-    var ivScale = indicatorMargin / (macdRange*2);
-    mShft = (paddingBottom - indicatorMargin) + (macdRange*ivScale);
-
-    for (l=(0-macdRange);l<=macdRange;l=l+((macdRange*scaleFactor)/(2*scaleFactor))){
-      ctx.beginPath();
-      ctx.moveTo(marginLeft, height - (l * ivScale) - mShft);
-      ctx.lineTo(c.width, height - (l * ivScale) - mShft);
-      ctx.strokeStyle = hLineColor;
-      if (l==(0-macdRange) | l==(macdRange))ctx.strokeStyle = textColor;
-      ctx.stroke();
-
-      ctx.fillStyle = textColor;
-      labelPos = width + 5;
-      var txtYpos = height - (l * ivScale) - mShft - 3
-      if (l>0)txtYpos += 10*scaleFactor+(2/scaleFactor);
-      if (l != 0)ctx.fillText(l.toFixed(8), labelPos, txtYpos);
-    }
-
-    // MACD and Historgram
-    ctx.beginPath();
-    ctx.moveTo(marginLeft, height - (startMacd * ivScale) - mShft);
-    count = 0;
-    for (var i = start; i < end; i++){
-      x = (count * candleWidth) + (count * candleSpacing);
-      ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (macdData[i]['macd'] * ivScale) - mShft);
-
-      x = (count * candleWidth) + (count * candleSpacing);
-      ctx.fillStyle = macdData[i]['hist']>0 ? greenColor : redColor;
-      tinyShift = macdData[i]['hist']>0 ? 1 : -1;
-      ctx.fillRect(x + marginLeft,height-mShft,candleWidth,0-(macdData[i]['hist'] * ivScale));
-      count++;
-    }
-    ctx.strokeStyle = emaColor;
-    ctx.stroke();
-
-    // Signal Line
-    ctx.beginPath();
-    ctx.moveTo(marginLeft, height - (startSig * ivScale) - mShft);
-    count = 0;
-    for (var i = start; i < end; i++){
-      x = (count * candleWidth) + (count * candleSpacing);
-      ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (macdData[i]['sig'] * ivScale) - mShft);
-      count++;
-    }
-    ctx.strokeStyle = ema2Color;
-    ctx.stroke();
-  }
-  // Fibonacci Retracement
-  if (showFib) {
-    ctx.fillStyle = fibLineColor;
-    var fibPrice;
-    x = marginLeft;
-    w = width;
-    h = 1;
-    fibPrice = chartLow;
-    y = Math.floor(height - (fibPrice * vScale));
-    ctx.fillRect(x, y + shft, w, h);
-    ctx.fillText("0%", x, y + shft - 1);
-    fibPrice = chartLow + ((chartHigh - chartLow) * 0.236);
-    y = Math.floor(height - (fibPrice * vScale));
-    ctx.fillRect(x, y + shft, w, h);
-    ctx.fillText("23.6%", x, y + shft - 1);
-    fibPrice = chartLow + ((chartHigh - chartLow) * 0.382);
-    y = Math.floor(height - (fibPrice * vScale));
-    ctx.fillRect(x, y + shft, w, h);
-    ctx.fillText("38.2%", x, y + shft - 1);
-    fibPrice = chartLow + ((chartHigh - chartLow) * 0.5);
-    y = Math.floor(height - (fibPrice * vScale));
-    ctx.fillRect(x, y + shft, w, h);
-    ctx.fillText("50%", x, y + shft - 1);
-    fibPrice = chartLow + ((chartHigh - chartLow) * 0.618);
-    y = Math.floor(height - (fibPrice * vScale));
-    ctx.fillRect(x, y + shft, w, h);
-    ctx.fillText("61.8%", x, y + shft - 1);
-    fibPrice = chartHigh;
-    y = Math.floor(height - (fibPrice * vScale));
-    ctx.fillRect(x, y + shft, w, h);
-    ctx.fillText("100%", x, y + shft - 1);
-    ctx.beginPath();
-    ctx.moveTo(fibLowX + marginLeft, height - chartLow * vScale + shft);
-    ctx.lineTo(fibHighX + marginLeft, height - chartHigh * vScale +
-      shft);
-    ctx.strokeStyle = fibLineColor;
-    ctx.stroke();
-  }
   returnArray['detectArray'] = detectArray;
   returnArray['high'] = chartHigh;
   returnArray['low'] = chartLow;
@@ -938,3 +703,50 @@ function depthChart(canvasId, data, dark) {
   return {'bids':depthDetectArrayBids,'asks':depthDetectArrayAsks};
 }
 
+function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
+                            dateString, timeString, x, y, w, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
+                            alignYaxisRight) {
+
+  for (var i = start; i < end; i++) {
+    if (i < 0) continue;
+    if (!(data[i] instanceof Object)) {
+      delete data[i];
+      continue;
+    }
+    if (timestampCount == sticksPerTimestamp) {
+      timestampCount = 0;
+      var date = new Date(data[i].date * 1000);
+      dateString = month[date.getUTCMonth()] + " " + date.getUTCDate();
+      timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" +
+        ("0" + date.getUTCMinutes()).slice(-2);
+      ctx.fillStyle = vLineColor;
+      x = marginLeft + count * (candleWidth + candleSpacing) + (
+        candleWidth / 2);
+      y = 0;
+      w = 1;
+      h = height;
+      ctx.fillRect(x, y, w, h);
+      ctx.fillStyle = textColor;
+
+      var dateH =  height - dateMargin;
+      var timeH = dateH + 10*scaleFactor;
+      x -= 13 * scaleFactor;
+
+      if (alignYaxisRight) {
+        if (count > 0) {
+          ctx.fillText(dateString, x, dateH);
+          ctx.fillText(timeString, x, timeH);
+        }
+      } else {
+        // align y axis left
+
+        ctx.fillText(dateString, x, dateH);
+
+        ctx.fillText(timeString, x, timeH);
+      }
+
+    }
+    timestampCount++;
+    count++;
+  }
+}

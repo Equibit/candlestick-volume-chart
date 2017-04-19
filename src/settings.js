@@ -1,3 +1,7 @@
+var primaryCurrency = 'BTC';
+var secondaryCurrency = 'LTC';
+var currencyPair = 'BTC_LTC';
+
 var loggedIn = false;
 var dark = false;
 var mobile = false;

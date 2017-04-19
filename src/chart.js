@@ -81,6 +81,7 @@ function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
+  console.log('changeCandlestickZoom...');
   returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, chartType, dark, smaPeriod, emaPeriod, ema2Period, showSma, showEma, showEma2, showFib, bollingerBand);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
@@ -150,9 +151,6 @@ function setCurrentCandlestickButton() {
 
 var loadedData;
 function refreshCandleSticksFirst() {
-  debugger
-  $(document.body).removeClass("ready");
-
 
   // $.get("/chartData/" + currencyPair + "-" + chartType + ".json").done(function(data){
   //   if (typeof data == "object"){
@@ -229,147 +227,147 @@ function initPreview() {
 
   $("#chartBoundsLeftContainer").css('padding-right', (chartCanvasWidth - right) + "px");
   $("#chartBoundsRightContainer").css('padding-left', (left) + "px");
-  // $("#chartBoundsRight").draggable({
-  //   drag: function(event, ui) {
-  //     var left = $('#chartBoundsLeft').position().left + handleWidth;
-  //     var right = $('#chartBoundsRight').position().left;
-  //     var maxRightHandleLeft = left;
-  //     if (right > maxRight) right = maxRight;
-  //     if (right < maxRightHandleLeft) {
-  //       right = maxRightHandleLeft;
-  //       cbr.css({left: maxRightHandleLeft});
-  //       return false;
-  //     }
-  //     var leftPercent = (left - handleWidth)/(cw - handleWidth*2);
-  //     var rightPercent = (right - handleWidth)/(cw - handleWidth*2);
-  //
-  //     changeCandlestickZoom(leftPercent, rightPercent);
-  //     $('#chartBounds').css({
-  //       'left': left - handleWidth,
-  //       'width': (right - left) + handleWidth*2
-  //     });
-  //     deactivateCurrentZoomButton();
-  //   },
-  //   cursor: 'ew-resize',
-  //   axis: "x",
-  //
-  //   containment: $('#zoomDiv'),
-  //   stop: function(event, ui) {
-  //     var left = $('#chartBoundsLeft').position().left + handleWidth;
-  //     var right = $('#chartBoundsRight').position().left;
-  //     if (right < left) right = left;
-  //     $('#chartBoundsRight').css({
-  //       'left': right,
-  //     });
-  //     $('#chartBounds').css({
-  //       'left': left - handleWidth,
-  //       'width': (right - left) + handleWidth*2
-  //     });
-  //     $("#chartBoundsLeftContainer").css(
-  //       'padding-right', (chartCanvasWidth -
-  //       right) + "px");
-  //
-  //     var cw = getChartWidth();
-  //     chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
-  //     chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
-  //
-  //     deactivateCurrentZoomButton();
-  //   },
-  //   refreshPositions: true
-  // });
-  // $("#chartBoundsLeft").draggable({
-  //   drag: function(event, ui) {
-  //     var left = $('#chartBoundsLeft').position().left + handleWidth;
-  //     var right = $('#chartBoundsRight').position().left;
-  //     var maxLeftHandleRight = right;
-  //     if (left < minLeft) left = minLeft;
-  //     if (left > maxLeftHandleRight) {
-  //       left = maxLeftHandleRight - handleWidth;
-  //       cbl.css({left: left});
-  //       return false;
-  //     }
-  //     $('#chartBoundsLeft').css({
-  //       'left': left - handleWidth,
-  //     });
-  //     $('#chartBounds').css({
-  //       'left': left - handleWidth,
-  //       'width': (right - left) + handleWidth*2
-  //     });
-  //     var cw = getChartWidth();
-  //     leftPercent = (left - handleWidth)/(cw - handleWidth*2);
-  //     rightPercent = (right - handleWidth)/(cw - handleWidth*2);
-  //
-  //     changeCandlestickZoom(leftPercent, rightPercent);
-  //     deactivateCurrentZoomButton();
-  //   },
-  //   cursor: 'ew-resize',
-  //   axis: "x",
-  //
-  //   containment: $("#zoomDiv"),
-  //   stop: function(event, ui) {
-  //     var left = $('#chartBoundsLeft').position().left + handleWidth;
-  //     var right = $('#chartBoundsRight').position().left;
-  //     if (left > right) left = right;
-  //     $('#chartBounds').css({
-  //       'left': left - handleWidth,
-  //       'width': (right - left) + handleWidth*2
-  //     });
-  //     $("#chartBoundsRightContainer").css(
-  //       'padding-left', (left) +
-  //       "px");
-  //
-  //     var cw = getChartWidth();
-  //     chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
-  //     chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
-  //     deactivateCurrentZoomButton();
-  //   },
-  //   refreshPositions: true
-  // });
-  // $("#chartBounds").draggable({
-  //   drag: function(event, ui) {
-  //     var left = $('#chartBounds').position().left + handleWidth;
-  //     var right = left + $('#chartBounds').width() - handleWidth * 2;
-  //     if (left < minLeft) left = minLeft;
-  //     if (left > maxLeft) left = maxLeft;
-  //     if (right > maxRight) right = maxRight;
-  //     if (right < minRight) right = minRight;
-  //     $('#chartBoundsLeft').css({
-  //       'left': left - handleWidth,
-  //     });
-  //     $('#chartBoundsRight').css({
-  //       'left': right,
-  //     });
-  //     var cw = getChartWidth();
-  //     leftPercent = (left - handleWidth)/(cw - handleWidth*2);
-  //     rightPercent = (right - handleWidth)/(cw - handleWidth*2);
-  //
-  //     changeCandlestickZoom(leftPercent, rightPercent);
-  //   },
-  //   axis: "x",
-  //   stop: function(event, ui) {
-  //     var cw = getChartWidth();
-  //     var left = $('#chartBounds').position().left + handleWidth;
-  //     var right = left + $('#chartBounds').width() - handleWidth * 2;
-  //     if (left < minLeft) left = minLeft;
-  //     if (left > maxLeft) left = maxLeft;
-  //     if (right > maxRight) right = maxRight;
-  //     if (right < minRight) right = minRight;
-  //     $('#chartBoundsLeft').css({
-  //       'left': left - handleWidth,
-  //     });
-  //     $('#chartBoundsRight').css({
-  //       'left': right,
-  //     });
-  //     $("#chartBoundsLeftContainer").css(
-  //       'padding-right', (cw - right) + "px");
-  //     $("#chartBoundsRightContainer").css(
-  //       'padding-left', (left) +
-  //       "px");
-  //     chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
-  //     chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
-  //   },
-  //   containment: $("#zoomDiv")
-  // });
+  $("#chartBoundsRight").draggable({
+    drag: function(event, ui) {
+      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var right = $('#chartBoundsRight').position().left;
+      var maxRightHandleLeft = left;
+      if (right > maxRight) right = maxRight;
+      if (right < maxRightHandleLeft) {
+        right = maxRightHandleLeft;
+        cbr.css({left: maxRightHandleLeft});
+        return false;
+      }
+      var leftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      var rightPercent = (right - handleWidth)/(cw - handleWidth*2);
+
+      changeCandlestickZoom(leftPercent, rightPercent);
+      $('#chartBounds').css({
+        'left': left - handleWidth,
+        'width': (right - left) + handleWidth*2
+      });
+      deactivateCurrentZoomButton();
+    },
+    cursor: 'ew-resize',
+    axis: "x",
+
+    containment: $('#zoomDiv'),
+    stop: function(event, ui) {
+      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var right = $('#chartBoundsRight').position().left;
+      if (right < left) right = left;
+      $('#chartBoundsRight').css({
+        'left': right,
+      });
+      $('#chartBounds').css({
+        'left': left - handleWidth,
+        'width': (right - left) + handleWidth*2
+      });
+      $("#chartBoundsLeftContainer").css(
+        'padding-right', (chartCanvasWidth -
+        right) + "px");
+
+      var cw = getChartWidth();
+      chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
+
+      deactivateCurrentZoomButton();
+    },
+    refreshPositions: true
+  });
+  $("#chartBoundsLeft").draggable({
+    drag: function(event, ui) {
+      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var right = $('#chartBoundsRight').position().left;
+      var maxLeftHandleRight = right;
+      if (left < minLeft) left = minLeft;
+      if (left > maxLeftHandleRight) {
+        left = maxLeftHandleRight - handleWidth;
+        cbl.css({left: left});
+        return false;
+      }
+      $('#chartBoundsLeft').css({
+        'left': left - handleWidth,
+      });
+      $('#chartBounds').css({
+        'left': left - handleWidth,
+        'width': (right - left) + handleWidth*2
+      });
+      var cw = getChartWidth();
+      leftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      rightPercent = (right - handleWidth)/(cw - handleWidth*2);
+
+      changeCandlestickZoom(leftPercent, rightPercent);
+      deactivateCurrentZoomButton();
+    },
+    cursor: 'ew-resize',
+    axis: "x",
+
+    containment: $("#zoomDiv"),
+    stop: function(event, ui) {
+      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var right = $('#chartBoundsRight').position().left;
+      if (left > right) left = right;
+      $('#chartBounds').css({
+        'left': left - handleWidth,
+        'width': (right - left) + handleWidth*2
+      });
+      $("#chartBoundsRightContainer").css(
+        'padding-left', (left) +
+        "px");
+
+      var cw = getChartWidth();
+      chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
+      deactivateCurrentZoomButton();
+    },
+    refreshPositions: true
+  });
+  $("#chartBounds").draggable({
+    drag: function(event, ui) {
+      var left = $('#chartBounds').position().left + handleWidth;
+      var right = left + $('#chartBounds').width() - handleWidth * 2;
+      if (left < minLeft) left = minLeft;
+      if (left > maxLeft) left = maxLeft;
+      if (right > maxRight) right = maxRight;
+      if (right < minRight) right = minRight;
+      $('#chartBoundsLeft').css({
+        'left': left - handleWidth,
+      });
+      $('#chartBoundsRight').css({
+        'left': right,
+      });
+      var cw = getChartWidth();
+      leftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      rightPercent = (right - handleWidth)/(cw - handleWidth*2);
+
+      changeCandlestickZoom(leftPercent, rightPercent);
+    },
+    axis: "x",
+    stop: function(event, ui) {
+      var cw = getChartWidth();
+      var left = $('#chartBounds').position().left + handleWidth;
+      var right = left + $('#chartBounds').width() - handleWidth * 2;
+      if (left < minLeft) left = minLeft;
+      if (left > maxLeft) left = maxLeft;
+      if (right > maxRight) right = maxRight;
+      if (right < minRight) right = minRight;
+      $('#chartBoundsLeft').css({
+        'left': left - handleWidth,
+      });
+      $('#chartBoundsRight').css({
+        'left': right,
+      });
+      $("#chartBoundsLeftContainer").css(
+        'padding-right', (cw - right) + "px");
+      $("#chartBoundsRightContainer").css(
+        'padding-left', (left) +
+        "px");
+      chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
+    },
+    containment: $("#zoomDiv")
+  });
 }
 
 function initChartToolPanel() {
@@ -479,14 +477,6 @@ function initChartMouseover() {
           }
         }
 
-        var chartInfoString = "<div class='row'><div>Open:</div><div>" + info.open.toFixed(8) + "</div></div>"
-          + "<div class='row'><div>Close:</div><div>" + info.close.toFixed(8) + "</div></div>"
-          + "<div class='row'><div>High:</div><div>" + info.high.toFixed(8) + "</div></div>"
-          + "<div class='row'><div>Low:</div><div>" + info.low.toFixed(8) + "</div></div>"
-          + "<div class='row'><div>Wtd Avg:</div><div>" + info.weightedAverage.toFixed(8) + "</div></div>"
-          + "<div class='row'><div>Vol (" + primaryCurrency + "):</div><div>" + volumeString + "</div></div>"
-          + "<div class='row'><div>Vol (" + secondaryCurrency + "):</div><div>" + quoteVolumeString + "</div></div>"
-          + "<div class='row'><div>Date:</div><div>" + info.date + "</div></div>";
         var chartInfoString = "<table class='mainChartInfoTable'><tr><td class='description'>Open:</td><td>" + info.open.toFixed(8) + "</td><td>&nbsp;</td>"
           + "<td class='description'>Close:</td><td>" + info.close.toFixed(8) + "</td><td>&nbsp;</td>"
           + "<td class='description'>High:</td><td>" + info.high.toFixed(8) + "</td><td>&nbsp;</td>"
@@ -495,11 +485,7 @@ function initChartMouseover() {
           + "<td class='description'>" + "Vol (" + primaryCurrency + "):</td><td>" + volumeString + "</td><td>&nbsp;</td>"
           + "<td class='description'>" + "Vol (" + secondaryCurrency + "):</td><td>" + quoteVolumeString + "</td><td>&nbsp;</td>"
           + "<td class='description'>Date:</td><td>" + info.date + "</td></tr></table>";
-        var indicatorString = "<table class='indicatorInfoTable'><tr><td class='description'>MACD:</td><td>" + info.macd.toFixed(8) + "</td>"
-          + "<td class='description'>Sig:</td><td>" + info.sig.toFixed(8) + "</td>"
-          + "<td class='description'>Hist:</td><td>" + info.hist.toFixed(8) + "</td></tr></table>";
         $("#mainChartInfo").empty().append(chartInfoString);
-        $("#indicatorInfo").empty().append(indicatorString);
         break;
       }
     }
