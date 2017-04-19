@@ -1,0 +1,12 @@
+{
+  "name": "candlestick-volume-chart",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "steal": "^1.4.6"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
