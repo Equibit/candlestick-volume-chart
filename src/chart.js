@@ -139,7 +139,7 @@ function changecandlestickPeriod(candlestickPeriod) {
   return;
 
   chartData = dataByPeriod[candlestickPeriod].data;
-  range = dataByPeriod[candlestickPeriod]['range'];
+  range = dataByPeriod[candlestickPeriod].range;
 
   changeCandlestickZoom(chartLeftPercent, chartRightPercent);
 }
@@ -155,8 +155,8 @@ function refreshCandleSticksFirst() {
   dataByPeriod[candlestickPeriod].data = candlestickData;
 
   var data = dataByPeriod[candlestickPeriod].data;
-  range = data[data.length-1]['date'] - data[0]['date'];
-  dataByPeriod[candlestickPeriod]['range'] = range;
+  range = data[data.length-1].date - data[0].date;
+  dataByPeriod[candlestickPeriod].range = range;
 
   chartData = data;
   setCurrentCandlestickButton();
@@ -170,24 +170,24 @@ function refreshCandleSticks() {
   var candleStart;
   var targetDate,firstIndex;
 
-  candleStart = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1]['date'] - candlestickPeriod;
+  candleStart = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1].date - candlestickPeriod;
   url = '/public?command=returnChartData&currencyPair='+currencyPair+'&start='+candleStart+'&end=9999999999&period='+candlestickPeriod;
   $.get(url).done(function(data){
     var newChartData = data;
-    targetDate = newChartData[0]['date'];
+    targetDate = newChartData[0].date;
 
     for (var x=0;x<dataByPeriod[candlestickPeriod].data.length;x++){
-      if (dataByPeriod[candlestickPeriod].data[x]['date'] == targetDate)firstIndex = x;
+      if (dataByPeriod[candlestickPeriod].data[x].date == targetDate)firstIndex = x;
     }
 
     for (var x=0;x<newChartData.length;x++){
       dataByPeriod[candlestickPeriod].data[firstIndex+x] = newChartData[x];
     }
 
-    dataByPeriod[candlestickPeriod]['range'] = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1]['date']-dataByPeriod[candlestickPeriod].data[0]['date'];
+    dataByPeriod[candlestickPeriod].range = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1].date-dataByPeriod[candlestickPeriod].data[0].date;
 
     chartData = dataByPeriod[candlestickPeriod].data;
-    range = dataByPeriod[candlestickPeriod]['range'];
+    range = dataByPeriod[candlestickPeriod].range;
     refreshChart();
   });
 }
