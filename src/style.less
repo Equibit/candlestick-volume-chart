@@ -232,3 +232,44 @@
     display: none;
   }
 }
+
+
+#chartCrosshairV {
+  width: 1px;
+  height: 100%;
+  top: 0px;
+  display: none;
+  position: absolute;
+  background-color: #91abac;
+  pointer-events: none;
+}
+
+#chartCrosshairH {
+  width: 100%;
+  height: 1px;
+  left: 0px;
+  display: none;
+  position: absolute;
+  background-color: #91abac;
+  pointer-events: none;
+}
+
+#crosshairHInfo {
+  position: absolute;
+  right: 0px;
+  width: 59px;
+  height: 12px;
+  margin-top: -12px;
+  display: none;
+  background-color: #ffffff;
+  font-size: 10px;
+  pointer-events: none;
+  -webkit-transition: margin-top 0.2s;
+  -moz-transition: margin-top 0.2s;
+  transition: margin-top 0.2s;
+}
+
+#crosshairHInfoTextContainer {
+  position: relative;
+  margin-top: -2px;
+}
