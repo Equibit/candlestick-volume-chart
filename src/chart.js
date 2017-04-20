@@ -63,7 +63,7 @@ function updateChartHighLow(high,low){
   $("#currentChartRange .high.info").empty().append(high.toFixed(8));
 }
 
-function chartSnapZoom(hours) {
+export function chartSnapZoom(hours) {
   var cw = getChartWidth();
   var leftPercent = 1 - (hours / (range / 3600));
   if (leftPercent<0)leftPercent=0;
@@ -152,13 +152,6 @@ function changecandlestickPeriod(candlestickPeriod) {
   } else {
     refreshCandleSticksFirst();
   }
-
-  return;
-
-  chartData = dataByPeriod[candlestickPeriod].data;
-  range = dataByPeriod[candlestickPeriod].range;
-
-  changeCandlestickZoom(chartLeftPercent, chartRightPercent);
 }
 
 function setCurrentCandlestickButton() {
@@ -519,6 +512,7 @@ function initChartMouseover() {
 
 export function initCharts_br_js(data) {
   chartData = data;
+  range = data[data.length-1].date - data[0].date;
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;

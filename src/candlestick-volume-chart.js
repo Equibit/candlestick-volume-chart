@@ -2,7 +2,7 @@ import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
 import view from './template.stache';
 import './style.less';
-import refreshCandleSticksFirst, { initCharts_br_js } from './chart';
+import refreshCandleSticksFirst, { initCharts_br_js, chartSnapZoom } from './chart';
 
 export const ViewModel = DefineMap.extend({
   /**
@@ -36,6 +36,10 @@ export const ViewModel = DefineMap.extend({
   drawChart (data = this.data) {
     refreshCandleSticksFirst(data);
   },
+
+  chartSnapZoom (hours) {
+    chartSnapZoom(hours);
+  }
 
 });
 
