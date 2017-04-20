@@ -9,7 +9,6 @@
       </div>
       <div id="chartCrosshairH" style="top: 125px; display: block;"></div>
       <div id="chartCrosshairV" style="left: 427.724px; display: block;"></div>
-      <!--<div class="chartInfoDiv" id="indicatorInfo" style="top: 327px; display: block;"><table class="indicatorInfoTable"><tbody><tr><td class="description">MACD:</td><td>-0.00072006</td><td class="description">Sig:</td><td>-0.00110549</td><td class="description">Hist:</td><td>0.00038542</td></tr></tbody></table></div>-->
     </div>
 
     <div id="zoomDiv" width="1008" style="width: 1008px;">
@@ -55,13 +54,3 @@
   </div>
 
 </div>
-
-<link rel="stylesheet" type="text/css" href="./lib/style.css">
-<script src="../node_modules/jquery/dist/jquery.js"></script>
-<script src="./lib/jquery-ui.min.js"></script>
-<script src="./settings.js"></script>
-<script src="./data-1.js"></script>
-<!--<script src="./data-2.js"></script>-->
-<script src="./candlestick.js"></script>
-<script src="./chart.js"></script>
-<script src="./index.js"></script>

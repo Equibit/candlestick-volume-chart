@@ -1,3 +1,12 @@
+//settings:
+var dark = false;
+////
+
+var numberOfCandles;
+var shft;
+var lineRangeTop;
+var lineRangeBottom;
+
 function backingScale() {
   if ('devicePixelRatio' in window && window.devicePixelRatio > 1)
     return window.devicePixelRatio;
@@ -5,7 +14,7 @@ function backingScale() {
   return 1;
 }
 
-function preview(canvasId, data, gutterWidth) {
+export function preview(canvasId, data, gutterWidth) {
   if (data === undefined) { return false; }
   var c = document.getElementById(canvasId);
   var ctx = c.getContext("2d");
@@ -66,7 +75,7 @@ function preview(canvasId, data, gutterWidth) {
   ctx.stroke();
 }
 
-function candlestick(canvasId, data, left, right, candlestickPeriod, dark, smaPeriod,
+export default function candlestick(canvasId, data, left, right, candlestickPeriod, dark, smaPeriod,
                      emaPeriod, ema2Period, showSma, showEma, showEma2, showFib,
                      bollingerBand,mobile) {
   if (data === undefined) { return false;}
@@ -245,7 +254,7 @@ function candlestick(canvasId, data, left, right, candlestickPeriod, dark, smaPe
 
   // Draw vertical lines and dates
   drawVerticalLines(ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
-    dateString, timeString, x, y, w, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
+    dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
     alignYaxisRight);
 
   if (alignYaxisRight) {
@@ -439,7 +448,7 @@ function candlestick(canvasId, data, left, right, candlestickPeriod, dark, smaPe
   returnArray['decimals'] = decimals;
   returnArray['mainChartHeight'] = (height - paddingBottom)/scaleFactor;
   returnArray['indicatorHeight'] = indicatorMargin/scaleFactor;
-  returnArray['macdRange'] = macdRange;
+  // returnArray['macdRange'] = macdRange;
   return returnArray;
 }
 
@@ -691,7 +700,7 @@ function depthChart(canvasId, data, dark) {
 }
 
 function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
-                            dateString, timeString, x, y, w, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
+                            dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
                             alignYaxisRight) {
 
   for (var i = start; i < end; i++) {

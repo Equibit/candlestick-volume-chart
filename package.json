@@ -1,12 +1,65 @@
 {
   "name": "candlestick-volume-chart",
   "version": "0.0.1",
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "steal": "^1.4.6"
+  "main": "dist/candlestick-volume-chart.min.js",
+  "description": "Candlestick-volume chart",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EDC/candlestick-volume-chart.git"
+  },
+  "author": {
+    "name": "EDC",
+    "email": "info@equibit.org",
+    "url": "https://equibit.org"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "files": [
+    "src"
+  ],
+  "semistandard": {
+    "env": [
+      "mocha"
+    ]
   },
   "dependencies": {
-    "jquery": "^3.2.1"
+    "can-component": "^3.0.7",
+    "can-define": "^1.0.17",
+    "can-stache": "^3.0.22",
+    "jquery": "^3.2.1",
+    "jquery-ui": "^1.12.1"
+  },
+  "devDependencies": {
+    "can-view-autorender": "^3.0.4",
+    "can-view-model": "^3.1.3",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "semistandard": "^10.0.0",
+    "steal": "^1.4.6",
+    "steal-less": "^1.2.0",
+    "steal-mocha": "^1.0.0",
+    "steal-stache": "^3.0.5"
+  },
+  "steal": {
+    "directories": {
+      "lib": "src"
+    },
+    "plugins": [
+      "chai",
+      "steal-less",
+      "steal-stache"
+    ],
+    "meta": {
+      "jquery": {
+        "format": "global",
+        "exports": "$"
+      },
+      "jquery-ui/ui/widgets/draggable": {
+        "deps": [
+          "jquery"
+        ]
+      }
+    }
   }
 }

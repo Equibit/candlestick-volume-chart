@@ -1,0 +1,20 @@
+<script type="text/stache" id="demo-html" can-autorender>
+  <can-import from="~/candlestick-volume-chart" />
+
+  Chart:
+  <candlestick-volume-chart {data}="data" />
+</script>
+
+<script src="../../node_modules/jquery/dist/jquery.js"></script>
+<script src="./lib/jquery-ui.min.js"></script>
+<script src="../../node_modules/steal/steal.js"
+        main="can-view-autorender">
+  import canViewModel from 'can-view-model';
+//  import $ from 'jquery';
+
+  $.get('data-small.json').then(data => {
+    canViewModel(document.getElementById('demo-html')).set({
+      data
+    });
+  });
+</script>

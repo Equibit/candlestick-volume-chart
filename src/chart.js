@@ -1,3 +1,18 @@
+// import 'jquery-ui/ui/widgets/draggable';
+import candlestick, { preview } from './candlestick';
+
+//settiongs:
+var primaryCurrency = 'BTC';
+var secondaryCurrency = 'LTC';
+var currencyPair = 'BTC_LTC';
+
+var loggedIn = false;
+var dark = false;
+var mobile = false;
+var mobileDetected = false;
+var usid = false;
+////
+
 var chartLeft = 650;
 var chartRight = 1000;
 var chartLeftPrev = chartLeft;
@@ -31,6 +46,8 @@ var chartsJsLoaded = false;
 var destinationL = 0,destinationT = 0;
 var chartRangeTop,chartRangeBottom;
 var mainChartHeight, chartDecimals, indicatorHeight, macdRange;
+
+var crosshairH;
 
 function hideChartLoading() {
   $('#chart30Canvas').show();
@@ -149,7 +166,7 @@ function setCurrentCandlestickButton() {
   $('.candlesticks .button#chartButton' + candlestickPeriod).addClass('chartButtonActive');
 }
 
-function refreshCandleSticksFirst() {
+export default function refreshCandleSticksFirst(candlestickData) {
 
   // Load data for the selected candleStick period:
   dataByPeriod[candlestickPeriod].data = candlestickData;
@@ -169,7 +186,7 @@ function deactivateCurrentZoomButton() {
   $('.zoom .chartButtonActive').removeClass('chartButtonActive');
 }
 
-function initPreview() {
+export function initPreview() {
   updateChartCanvasWidth();
   var cw = getChartWidth();
   var maxRight = cw - handleWidth,
@@ -330,7 +347,7 @@ function updateChartCanvasWidth() {
   chartCanvasWidth = $('#canvasContainer').width();
 }
 
-function resizeCharts() {
+export function resizeCharts() {
   updateChartCanvasWidth();
 
   var cw = getChartWidth();
@@ -386,8 +403,9 @@ function initChartMouseover() {
     if (typeof crosshairH == "undefined")
       crosshairH = detectArray[detectArray.length-1].left + (gap/3) - 0.5;
 
-    l = e.pageX - 160;
-    crosshairV = e.pageY - $("#canvasContainer").offset().top - 3;
+    var l = e.pageX - 160;
+    var crosshairV = e.pageY - $("#canvasContainer").offset().top - 3;
+    var linePosText;
 
     if (crosshairV<=mainChartHeight){
       linePosText = (chartRangeTop - ((crosshairV+1)/mainChartHeight)*(chartRangeTop-chartRangeBottom)).toFixed(chartDecimals);
@@ -396,7 +414,7 @@ function initChartMouseover() {
     }
 
     $("#crosshairHInfoTextContainer").empty().append(linePosText);
-    crosshairHInfoPos = crosshairV;
+    var crosshairHInfoPos = crosshairV;
     if (crosshairV < 12 | (crosshairV>mainChartHeight && crosshairV<mainChartHeight + 12)){
       $('#crosshairHInfo').css('margin-top','0px');
     } else {
@@ -441,8 +459,8 @@ function initChartMouseover() {
     var h,v,l,t;
     var found = false;
     if (!(depthDetectArrays instanceof Object))return;
-    bids = depthDetectArrays['bids'];
-    asks = depthDetectArrays['asks'];
+    var bids = depthDetectArrays['bids'];
+    var asks = depthDetectArrays['asks'];
     if (posX<=bids[0]['h']){
       for (var x = 0; x < bids.length; x++){
         h = bids[x]['h'];
@@ -499,7 +517,8 @@ function initChartMouseover() {
 
 }
 
-function initCharts_br_js() {
+export function initCharts_br_js(data) {
+  chartData = data;
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;
   initChartMouseover();
