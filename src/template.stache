@@ -28,26 +28,26 @@
     <div class="group zoom">
       <div class="name">Zoom:</div>
       <ul class="button-group">
-        <li><button class="button" ($click)="zoomTo(6)">6h</button></li>
-        <li><button class="button" ($click)="zoomTo(24)">24h</button></li>
-        <li><button class="button" ($click)="zoomTo(48)">2d</button></li>
-        <li><button class="button" ($click)="zoomTo(96)">4d</button></li>
-        <li><button class="button" ($click)="zoomTo(168)">1w</button></li>
-        <li><button class="button" ($click)="zoomTo(336)">2w</button></li>
-        <li><button class="button" ($click)="zoomTo(744)">1m</button></li>
-        <li><button class="button" ($click)="zoomTo(99999)">All</button></li>
+        <li><button class="button {{#is zoom 6}}chartButtonActive{{/is}}" ($click)="zoomTo(6)">6h</button></li>
+        <li><button class="button {{#is zoom 24}}chartButtonActive{{/is}}" ($click)="zoomTo(24)">24h</button></li>
+        <li><button class="button {{#is zoom 48}}chartButtonActive{{/is}}" ($click)="zoomTo(48)">2d</button></li>
+        <li><button class="button {{#is zoom 96}}chartButtonActive{{/is}}" ($click)="zoomTo(96)">4d</button></li>
+        <li><button class="button {{#is zoom 168}}chartButtonActive{{/is}}" ($click)="zoomTo(168)">1w</button></li>
+        <li><button class="button {{#is zoom 336}}chartButtonActive{{/is}}" ($click)="zoomTo(336)">2w</button></li>
+        <li><button class="button {{#is zoom 744}}chartButtonActive{{/is}}" ($click)="zoomTo(744)">1m</button></li>
+        <li><button class="button {{#is zoom 99999}}chartButtonActive{{/is}}" ($click)="zoomTo(99999)">All</button></li>
       </ul>
     </div>
 
     <div class="group candlesticks">
       <div class="name">Candlesticks:</div>
       <ul class="button-group">
-        <li><button class="button" id="chartButton300">5-min</button></li>
-        <li><button class="button" id="chartButton900">15-min</button></li>
-        <li><button class="button" id="chartButton1800">30-min</button></li>
-        <li><button class="button" id="chartButton7200">2-hr</button></li>
-        <li><button class="button" id="chartButton14400">4-hr</button></li>
-        <li><button class="button chartButtonActive" id="chartButton86400">1-day</button></li>
+        <li><button class="button {{#is candlestickSize 300}}chartButtonActive{{/is}}" ($click)="sizeTo(300)">5min</button></li>
+        <li><button class="button {{#is candlestickSize 900}}chartButtonActive{{/is}}" ($click)="sizeTo(900)">15min</button></li>
+        <li><button class="button {{#is candlestickSize 1800}}chartButtonActive{{/is}}" ($click)="sizeTo(1800)">30min</button></li>
+        <li><button class="button {{#is candlestickSize 7200}}chartButtonActive{{/is}}" ($click)="sizeTo(7200)">2hr</button></li>
+        <li><button class="button {{#is candlestickSize 14400}}chartButtonActive{{/is}}" ($click)="sizeTo(14400)">4hr</button></li>
+        <li><button class="button {{#is candlestickSize 86400}}chartButtonActive{{/is}}" ($click)="sizeTo(86400)">1day</button></li>
       </ul>
     </div>
 

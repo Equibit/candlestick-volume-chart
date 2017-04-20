@@ -30,6 +30,8 @@ export const ViewModel = DefineMap.extend({
    */
   isInitialized: 'boolean',
 
+  zoom: 'number',
+
   /**
    * @function initChart
    * Initializes chart (size, mouse events, etc).
@@ -59,7 +61,19 @@ export const ViewModel = DefineMap.extend({
    * @param {Number} hours
    */
   zoomTo (hours) {
+    this.zoom = hours;
     chartSnapZoom(hours);
+  },
+
+  /**
+   * @function sizeTo
+   * Changes candlestick size to the given value, in seconds.
+   *
+   * @param {Number} seconds
+   * The size of a candlestick
+   */
+  sizeTo (seconds) {
+    this.candlestickSize = seconds;
   }
 });
 
