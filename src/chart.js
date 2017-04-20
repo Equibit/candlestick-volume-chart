@@ -51,7 +51,7 @@ var crosshairH;
 
 function hideChartLoading() {
   $('#chart30Canvas').show();
-  $(document.body).addClass("ready");
+  $('.bigChart').addClass("ready");
 }
 
 function updateChartHighLow(high,low){
@@ -525,6 +525,7 @@ export function initCharts_br_js(data) {
   initChartMouseover();
   $(window).resize(function(){resizeCharts();});
   resizeCharts();
+  hideChartLoading();
 }
 
 $(document).ready(function() {
