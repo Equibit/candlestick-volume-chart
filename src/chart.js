@@ -159,7 +159,7 @@ function setCurrentCandlestickButton() {
   $('.candlesticks .button#chartButton' + candlestickPeriod).addClass('chartButtonActive');
 }
 
-export default function refreshCandleSticksFirst(candlestickData) {
+function refreshCandleSticksFirst(candlestickData) {
 
   // Load data for the selected candleStick period:
   dataByPeriod[candlestickPeriod].data = candlestickData;
@@ -354,7 +354,6 @@ export function resizeCharts() {
 
   initPreview();
   refreshChart();
-  // refreshDepthChart();
 
   chartCanvasWidthPrev = chartCanvasWidth;
 }
@@ -362,6 +361,9 @@ export function resizeCharts() {
 function initChartMouseover() {
   // Main Chart
   $('#canvasContainer').on('mousemove', function (e) {
+    if (!detectArray){
+      return;
+    }
     var posX = e.pageX - this.offsetLeft - $("#canvasContainer").offset().left;
     for (var c = 0; c < detectArray.length; c++) {
       var info = detectArray[c];
@@ -444,82 +446,24 @@ function initChartMouseover() {
     $('#chartCrosshairH').css('display', 'none');
     $('#chartCrosshairV').css('display', 'none');
   });
-
-  // Depth chart
-  var dotRadius = $('#depthChartDot').width() / 2;
-  $('#depthChartContainer').on('mousemove', function (e) {
-    var posX = e.pageX - this.offsetLeft;
-    var h,v,l,t;
-    var found = false;
-    if (!(depthDetectArrays instanceof Object))return;
-    var bids = depthDetectArrays['bids'];
-    var asks = depthDetectArrays['asks'];
-    if (posX<=bids[0]['h']){
-      for (var x = 0; x < bids.length; x++){
-        h = bids[x]['h'];
-        v = bids[x]['v'];
-        if (x>0)h = (h + bids[x-1]['h'])/2;
-        if (posX<=h){
-          found = true;
-          l = bids[x]['h'];
-          t = bids[x]['v'];
-          var chartInfoString = "<div class='row'><div>Price:</div><div>" + bids[x]['rate'].toFixed(8) + "</div></div>"
-            + "<div class='row'><div>Sum (" + secondaryCurrency + "):</div><div>" + bids[x]['quoteSum'].toFixed(3) + "</div></div>"
-            + "<div class='row'><div>Sum (" + primaryCurrency + "):</div><div>" + bids[x]['baseSum'].toFixed(3) + "</div></div>"
-        }
-      }
-    } else if (posX>=asks[0]['h']){
-      for (var x = 0; x < asks.length; x++){
-        h = asks[x]['h'];
-        v = asks[x]['v'];
-        if (x>0)h = (h + asks[x-1]['h'])/2;
-        if (posX>=h){
-          found = true;
-          l = asks[x]['h'];
-          t = asks[x]['v'];
-          var chartInfoString = "<div class='row'><div>Price:</div><div>" + asks[x]['rate'].toFixed(8) + "</div></div>"
-            + "<div class='row'><div>Sum (" + secondaryCurrency + "):</div><div>" + asks[x]['quoteSum'].toFixed(3) + "</div></div>"
-            + "<div class='row'><div>Sum (" + primaryCurrency + "):</div><div>" + asks[x]['baseSum'].toFixed(3) + "</div></div>"
-        }
-      }
-    }
-    if (found){
-      t += this.offsetTop;
-      l += this.offsetLeft;
-      var minLeft = 0;
-      var minTop = this.offsetTop;
-      if (t<minTop)t=minTop;
-
-      destinationL = l;
-      destinationT = t;
-
-      $('#depthChartInfo').empty().append(chartInfoString);
-      $('#depthChartInfo').not('.collapsed').css('left',destinationL + 5).css('top',destinationT - 75).css('display', 'block');
-      $('#depthChartYline').not('.collapsed').css('left', destinationL).css('display', 'block');
-      $('#depthChartDot').not('.collapsed').css('left', destinationL - dotRadius).css('top',destinationT - dotRadius - 2).css('display', 'block');
-
-
-    } else {
-      $('#depthChartInfo, #depthChartYline, #depthChartDot').css('display', 'none');
-    }
-  });
-  $('#depthChartContainer').mouseout(function() {
-    $('#depthChartInfo, #depthChartYline, #depthChartDot').css('display', 'none');
-
-  });
-
 }
 
-export function initCharts_br_js(data) {
-  chartData = data;
-  range = data[data.length-1].date - data[0].date;
+export function init() {
+  console.log('Chart:init()');
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;
   initChartMouseover();
+
   $(window).resize(function(){resizeCharts();});
-  resizeCharts();
+}
+
+export default function render (data) {
+  console.log('Chart:render()');
+  chartData = data;
+  range = data[data.length-1].date - data[0].date;
   hideChartLoading();
+  resizeCharts();
 }
 
 $(document).ready(function() {

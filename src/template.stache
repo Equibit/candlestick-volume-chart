@@ -28,14 +28,14 @@
     <div class="group zoom">
       <div class="name">Zoom:</div>
       <ul class="button-group">
-        <li><button class="button" ($click)="chartSnapZoom(6)">6h</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(24)">24h</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(48)">2d</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(96)">4d</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(168)">1w</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(336)">2w</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(744)">1m</button></li>
-        <li><button class="button" ($click)="chartSnapZoom(99999)">All</button></li>
+        <li><button class="button" ($click)="zoomTo(6)">6h</button></li>
+        <li><button class="button" ($click)="zoomTo(24)">24h</button></li>
+        <li><button class="button" ($click)="zoomTo(48)">2d</button></li>
+        <li><button class="button" ($click)="zoomTo(96)">4d</button></li>
+        <li><button class="button" ($click)="zoomTo(168)">1w</button></li>
+        <li><button class="button" ($click)="zoomTo(336)">2w</button></li>
+        <li><button class="button" ($click)="zoomTo(744)">1m</button></li>
+        <li><button class="button" ($click)="zoomTo(99999)">All</button></li>
       </ul>
     </div>
 

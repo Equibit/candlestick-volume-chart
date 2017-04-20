@@ -2,7 +2,7 @@ import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
 import view from './template.stache';
 import './style.less';
-import refreshCandleSticksFirst, { initCharts_br_js, chartSnapZoom } from './chart';
+import render, { init, chartSnapZoom } from './chart';
 
 export const ViewModel = DefineMap.extend({
   /**
@@ -11,11 +11,8 @@ export const ViewModel = DefineMap.extend({
   data: {
     type: '*',
     set (val) {
-      // this.drawChart(val);
-      setTimeout(function(){
-
-        initCharts_br_js(val);
-        // $(window).resize(function(){resizeCharts();});
+      setTimeout(() => {
+        this.drawChart();
       }, 0);
       return val;
     }
@@ -23,24 +20,47 @@ export const ViewModel = DefineMap.extend({
 
   /**
    * @property {Number} candlestickSize
-   * The size of a candlestick, in seconds
+   * The size of a candlestick, in seconds.
    */
   candlestickSize: 'number',
 
   /**
-   * @property {Number} range
-   * Date range of the data, in seconds
+   * @property {Boolean} isInitialized
+   * Indicates whether the chart was initialized.
    */
-  range: 'number',
+  isInitialized: 'boolean',
 
-  drawChart (data = this.data) {
-    refreshCandleSticksFirst(data);
+  /**
+   * @function initChart
+   * Initializes chart (size, mouse events, etc).
+   */
+  initChart () {
+    init();
+    this.isInitialized = true;
   },
 
-  chartSnapZoom (hours) {
+  /**
+   * @function drawChart
+   * Main function to render chart data.
+   *
+   * @param {Array} data
+   */
+  drawChart (data = this.data) {
+    if (!this.isInitialized){
+      return;
+    }
+    render(data);
+  },
+
+  /**
+   * @function zoomTo
+   * A click handler for custom zoom button.
+   *
+   * @param {Number} hours
+   */
+  zoomTo (hours) {
     chartSnapZoom(hours);
   }
-
 });
 
 export default Component.extend({
@@ -49,7 +69,7 @@ export default Component.extend({
   view,
   events: {
     inserted () {
-
+      this.viewModel.initChart();
     }
   }
 });
