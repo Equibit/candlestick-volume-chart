@@ -22,7 +22,7 @@ var chartRightPercent = 1.00;
 
 var chartCanvasWidth = 1000;
 var chartCanvasWidthPrev = chartCanvasWidth;
-var handleWidth = $('#chartBoundsLeft').width();
+var handleWidth;
 
 var depthDetectArrays;
 var currencyPair;
@@ -267,8 +267,8 @@ export function initPreview() {
         'width': (right - left) + handleWidth*2
       });
       var cw = getChartWidth();
-      leftPercent = (left - handleWidth)/(cw - handleWidth*2);
-      rightPercent = (right - handleWidth)/(cw - handleWidth*2);
+      var leftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      var rightPercent = (right - handleWidth)/(cw - handleWidth*2);
 
       changeCandlestickZoom(leftPercent, rightPercent);
       deactivateCurrentZoomButton();
@@ -311,8 +311,8 @@ export function initPreview() {
         'left': right,
       });
       var cw = getChartWidth();
-      leftPercent = (left - handleWidth)/(cw - handleWidth*2);
-      rightPercent = (right - handleWidth)/(cw - handleWidth*2);
+      var leftPercent = (left - handleWidth)/(cw - handleWidth*2);
+      var rightPercent = (right - handleWidth)/(cw - handleWidth*2);
 
       changeCandlestickZoom(leftPercent, rightPercent);
     },
@@ -519,6 +519,7 @@ function initChartMouseover() {
 
 export function initCharts_br_js(data) {
   chartData = data;
+  handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;
   initChartMouseover();

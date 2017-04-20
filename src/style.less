@@ -187,3 +187,42 @@
     font-size: 10px;
   }
 }
+
+
+#zoomDiv {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border-top: 1px solid #91abac;
+  background: #f4f8f8;
+  -webkit-box-shadow: inset 0 3px 8px #dfe7e7;
+  -moz-box-shadow: inset 0 3px 8px #dfe7e7;
+  box-shadow: inset 0 3px 8px #dfe7e7;
+  overflow: hidden;
+
+  #chartBounds {
+    position: absolute;
+    top: 0;
+    height: 50px;
+    width: 500px;
+    background: #ffab06;
+    opacity: 0.15; }
+  .chartBoundsContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; }
+  #chartBoundsLeft, #chartBoundsRight {
+    position: absolute;
+    top: -1px;
+    width: 8px;
+    height: 52px;
+    -webkit-box-shadow: inset 0 0 1px #001e1e;
+    -moz-box-shadow: inset 0 0 1px #001e1e;
+    box-shadow: inset 0 0 1px #001e1e;
+    background-color: #f8fafa;
+    cursor: ew-resize; }
+  #previewCanvas {
+    width: 1000px;
+    height: 50px; }
+}
