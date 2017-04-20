@@ -19,8 +19,8 @@ var chartData, range;
 var smaPeriod =50;
 var emaPeriod =30;
 var ema2Period =20;
-var showSma = true;
-var showEma = true;
+var showSma = false;
+var showEma = false;
 var showFib=false;
 var bollingerBand=false;
 var showEma2=false;
@@ -121,7 +121,7 @@ function refreshChart() {
 
   changeCandlestickZoom(leftPercent, rightPercent);
 
-  // Zoom preview of all data:
+  // The bottom Zoom control (preview of all data):
   preview('previewCanvas', chartData, handleWidth);
 }
 
@@ -164,40 +164,10 @@ function refreshCandleSticksFirst() {
   hideChartLoading();
 }
 
-function refreshCandleSticks() {
-  if (!windowActive)return;
-  var url;
-  var candleStart;
-  var targetDate,firstIndex;
-
-  candleStart = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1].date - candlestickPeriod;
-  url = '/public?command=returnChartData&currencyPair='+currencyPair+'&start='+candleStart+'&end=9999999999&period='+candlestickPeriod;
-  $.get(url).done(function(data){
-    var newChartData = data;
-    targetDate = newChartData[0].date;
-
-    for (var x=0;x<dataByPeriod[candlestickPeriod].data.length;x++){
-      if (dataByPeriod[candlestickPeriod].data[x].date == targetDate)firstIndex = x;
-    }
-
-    for (var x=0;x<newChartData.length;x++){
-      dataByPeriod[candlestickPeriod].data[firstIndex+x] = newChartData[x];
-    }
-
-    dataByPeriod[candlestickPeriod].range = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1].date-dataByPeriod[candlestickPeriod].data[0].date;
-
-    chartData = dataByPeriod[candlestickPeriod].data;
-    range = dataByPeriod[candlestickPeriod].range;
-    refreshChart();
-  });
-}
-
-
 function deactivateCurrentZoomButton() {
   $('.zoom .chartButtonActive').blur();
   $('.zoom .chartButtonActive').removeClass('chartButtonActive');
 }
-
 
 function initPreview() {
   updateChartCanvasWidth();
@@ -355,69 +325,6 @@ function initPreview() {
     containment: $("#zoomDiv")
   });
 }
-
-function initChartToolPanel() {
-  $("#emaCheckbox").change(function () {
-    if ($("#emaCheckbox:checked").length > 0) {
-      showEma = true;
-    } else {
-      showEma = false;
-    }
-    refreshChart();
-  });
-
-  $("#ema2Checkbox").change(function () {
-    if ($("#ema2Checkbox:checked").length > 0) {
-      showEma2 = true;
-    } else {
-      showEma2 = false;
-    }
-    refreshChart();
-  });
-
-  $("#smaCheckbox").change(function () {
-    if ($("#smaCheckbox:checked").length > 0) {
-      showSma = true;
-    } else {
-      showSma = false;
-    }
-    refreshChart();
-  });
-
-  $("#fibCheckbox").change(function () {
-    if ($("#fibCheckbox:checked").length > 0) {
-      showFib = true;
-    } else {
-      showFib = false;
-    }
-    refreshChart();
-  });
-
-  $("#bollingerCheckbox").change(function () {
-    if ($("#bollingerCheckbox:checked").length > 0) {
-      bollingerBand = true;
-    } else {
-      bollingerBand = false;
-    }
-    refreshChart();
-  });
-
-  $("#smaPeriod").on("keyup", function () {
-    smaPeriod = document.getElementById("smaPeriod").value;
-    refreshChart();
-  });
-
-  $("#emaPeriod").on("keyup", function () {
-    emaPeriod = document.getElementById("emaPeriod").value;
-    refreshChart();
-  });
-
-  $("#ema2Period").on("keyup", function () {
-    ema2Period = document.getElementById("ema2Period").value;
-    refreshChart();
-  });
-}
-
 
 function updateChartCanvasWidth() {
   chartCanvasWidth = $('#canvasContainer').width();
@@ -595,9 +502,8 @@ function initChartMouseover() {
 function initCharts_br_js() {
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;
-  initChartToolPanel();
   initChartMouseover();
-  // $(window).resize(function(){resizeCharts();});
+  $(window).resize(function(){resizeCharts();});
   resizeCharts();
 }
 
