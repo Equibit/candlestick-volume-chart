@@ -66,7 +66,7 @@ function preview(canvasId, data, gutterWidth) {
   ctx.stroke();
 }
 
-function candlestick(canvasId, data, left, right, chartType, dark, smaPeriod,
+function candlestick(canvasId, data, left, right, candlestickPeriod, dark, smaPeriod,
                      emaPeriod, ema2Period, showSma, showEma, showEma2, showFib,
                      bollingerBand,mobile) {
   if (data === undefined) { return false;}

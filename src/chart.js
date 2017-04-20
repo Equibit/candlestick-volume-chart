@@ -24,8 +24,8 @@ var showEma = true;
 var showFib=false;
 var bollingerBand=false;
 var showEma2=false;
-var allChartData = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
-var chartType = 1800;
+var dataByPeriod = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
+var candlestickPeriod = 1800;
 var orderBook;
 var chartsJsLoaded = false;
 var destinationL = 0,destinationT = 0;
@@ -65,7 +65,7 @@ function chartSnapZoom(hours) {
   });
 
   returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent,
-    chartType, dark, smaPeriod, emaPeriod, ema2Period, showSma,
+    candlestickPeriod, dark, smaPeriod, emaPeriod, ema2Period, showSma,
     showEma, showEma2, showFib, bollingerBand);
 
   detectArray = returnArray['detectArray'];
@@ -81,8 +81,7 @@ function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  console.log('changeCandlestickZoom...');
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, chartType, dark, smaPeriod, emaPeriod, ema2Period, showSma, showEma, showEma2, showFib, bollingerBand);
+  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, dark, smaPeriod, emaPeriod, ema2Period, showSma, showEma, showEma2, showFib, bollingerBand);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;
@@ -122,15 +121,16 @@ function refreshChart() {
 
   changeCandlestickZoom(leftPercent, rightPercent);
 
+  // Zoom preview of all data:
   preview('previewCanvas', chartData, handleWidth);
 }
 
-function changeChartType(chartType) {
+function changecandlestickPeriod(candlestickPeriod) {
   var left = $('#chartBoundsLeft').position().left + handleWidth;
   var right = $('#chartBoundsRight').position().left;
-  window.chartType = chartType;
+  window.candlestickPeriod = candlestickPeriod;
 
-  if ('candleStick' in allChartData[chartType]){
+  if ('candleStick' in dataByPeriod[candlestickPeriod]){
     refreshCandleSticks();
   } else {
     refreshCandleSticksFirst();
@@ -138,44 +138,31 @@ function changeChartType(chartType) {
 
   return;
 
-  chartData = allChartData[chartType]['candleStick'];
-  range = allChartData[chartType]['range'];
+  chartData = dataByPeriod[candlestickPeriod].data;
+  range = dataByPeriod[candlestickPeriod]['range'];
 
   changeCandlestickZoom(chartLeftPercent, chartRightPercent);
 }
 
 function setCurrentCandlestickButton() {
   $('.candlesticks .button.chartButtonActive').removeClass('chartButtonActive');
-  $('.candlesticks .button#chartButton' + chartType).addClass('chartButtonActive');
+  $('.candlesticks .button#chartButton' + candlestickPeriod).addClass('chartButtonActive');
 }
 
-var loadedData;
 function refreshCandleSticksFirst() {
 
-  // $.get("/chartData/" + currencyPair + "-" + chartType + ".json").done(function(data){
-  //   if (typeof data == "object"){
-  //     var start = parseInt(data[data.length-1]['date']) + parseInt(chartType);
-      allChartData[chartType]['candleStick'] = data;
-    // } else {
-    //   var start = 0;
-    //   allChartData[chartType]['candleStick'] = [];
-    //   console.log(data);
-    // }
-    // var url = '/public?command=returnChartData&currencyPair='+currencyPair+'&start=' + start + '&end=9999999999&period='+chartType;
+  // Load data for the selected candleStick period:
+  dataByPeriod[candlestickPeriod].data = candlestickData;
 
-    // $.get(url).done(function(data2){
-      allChartData[chartType]['candleStick'] = allChartData[chartType]['candleStick'].concat(data2);
-      d = allChartData[chartType]['candleStick'];
-      range = d[d.length-1]['date']-d[0]['date'];
-      allChartData[chartType]['range'] = range;
-      chartData = d;
-      setCurrentCandlestickButton();
-      refreshChart();
-      hideChartLoading();
-    // });
-  // });
+  var data = dataByPeriod[candlestickPeriod].data;
+  range = data[data.length-1]['date'] - data[0]['date'];
+  dataByPeriod[candlestickPeriod]['range'] = range;
+
+  chartData = data;
+  setCurrentCandlestickButton();
+  refreshChart();
+  hideChartLoading();
 }
-
 
 function refreshCandleSticks() {
   if (!windowActive)return;
@@ -183,27 +170,26 @@ function refreshCandleSticks() {
   var candleStart;
   var targetDate,firstIndex;
 
-  candleStart = allChartData[chartType]['candleStick'][allChartData[chartType]['candleStick'].length-1]['date'] - chartType;
-  url = '/public?command=returnChartData&currencyPair='+currencyPair+'&start='+candleStart+'&end=9999999999&period='+chartType;
+  candleStart = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1]['date'] - candlestickPeriod;
+  url = '/public?command=returnChartData&currencyPair='+currencyPair+'&start='+candleStart+'&end=9999999999&period='+candlestickPeriod;
   $.get(url).done(function(data){
     var newChartData = data;
     targetDate = newChartData[0]['date'];
 
-    for (var x=0;x<allChartData[chartType]['candleStick'].length;x++){
-      if (allChartData[chartType]['candleStick'][x]['date'] == targetDate)firstIndex = x;
+    for (var x=0;x<dataByPeriod[candlestickPeriod].data.length;x++){
+      if (dataByPeriod[candlestickPeriod].data[x]['date'] == targetDate)firstIndex = x;
     }
 
     for (var x=0;x<newChartData.length;x++){
-      allChartData[chartType]['candleStick'][firstIndex+x] = newChartData[x];
+      dataByPeriod[candlestickPeriod].data[firstIndex+x] = newChartData[x];
     }
 
-    allChartData[chartType]['range'] = allChartData[chartType]['candleStick'][allChartData[chartType]['candleStick'].length-1]['date']-allChartData[chartType]['candleStick'][0]['date'];
+    dataByPeriod[candlestickPeriod]['range'] = dataByPeriod[candlestickPeriod].data[dataByPeriod[candlestickPeriod].data.length-1]['date']-dataByPeriod[candlestickPeriod].data[0]['date'];
 
-    chartData = allChartData[chartType]['candleStick'];
-    range = allChartData[chartType]['range'];
+    chartData = dataByPeriod[candlestickPeriod].data;
+    range = dataByPeriod[candlestickPeriod]['range'];
     refreshChart();
   });
-
 }
 
 
