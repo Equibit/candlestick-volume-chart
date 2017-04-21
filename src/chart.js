@@ -1,22 +1,11 @@
 // import 'jquery-ui/ui/widgets/draggable';
 import candlestick, { preview } from './candlestick';
 
-//settiongs:
 var primaryCurrency = 'BTC';
 var secondaryCurrency = 'LTC';
-var currencyPair = 'BTC_LTC';
-
-var loggedIn = false;
-var dark = false;
-var mobile = false;
-var mobileDetected = false;
-var usid = false;
-////
 
 var chartLeft = 650;
 var chartRight = 1000;
-var chartLeftPrev = chartLeft;
-var chartRightPrev = chartRight;
 var chartLeftPercent = 0.90;
 var chartRightPercent = 1.00;
 
@@ -24,10 +13,6 @@ var chartCanvasWidth = 1000;
 var chartCanvasWidthPrev = chartCanvasWidth;
 var handleWidth;
 
-var depthDetectArrays;
-var currencyPair;
-var primaryCurrency;
-var secondaryCurrency;
 var returnArray = [];
 var detectArray = [];
 var chartData, range;
@@ -41,9 +26,7 @@ var bollingerBand=false;
 var showEma2=false;
 var dataByPeriod = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
 var candlestickPeriod = 1800;
-var orderBook;
 var chartsJsLoaded = false;
-var destinationL = 0,destinationT = 0;
 var chartRangeTop,chartRangeBottom;
 var mainChartHeight, chartDecimals, indicatorHeight, macdRange;
 
@@ -82,7 +65,7 @@ export function chartSnapZoom(hours) {
   });
 
   returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent,
-    candlestickPeriod, dark, smaPeriod, emaPeriod, ema2Period, showSma,
+    candlestickPeriod, smaPeriod, emaPeriod, ema2Period, showSma,
     showEma, showEma2, showFib, bollingerBand);
 
   detectArray = returnArray['detectArray'];
@@ -98,7 +81,7 @@ export function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, dark, smaPeriod, emaPeriod, ema2Period, showSma, showEma, showEma2, showFib, bollingerBand);
+  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, smaPeriod, emaPeriod, ema2Period, showSma, showEma, showEma2, showFib, bollingerBand);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;

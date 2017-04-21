@@ -1,7 +1,3 @@
-//settings:
-var dark = false;
-////
-
 var numberOfCandles;
 var shft;
 var lineRangeTop;
@@ -66,16 +62,12 @@ export function preview(canvasId, data, gutterWidth) {
     x = (i / data.length) * width;
     ctx.lineTo(x + gutterWidth, height - (close * vScale) + shft);
   }
-  if (dark) {
-    ctx.strokeStyle = "#34595c";
-  } else {
-    ctx.strokeStyle = "#084044";
-  }
+  ctx.strokeStyle = "#084044";
 
   ctx.stroke();
 }
 
-export default function candlestick(canvasId, data, left, right, candlestickPeriod, dark, smaPeriod,
+export default function candlestick(canvasId, data, left, right, candlestickPeriod, smaPeriod,
                      emaPeriod, ema2Period, showSma, showEma, showEma2, showFib,
                      bollingerBand,mobile) {
   if (data === undefined) { return false;}
@@ -128,20 +120,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   paddingBottom += indicatorMargin;
   marginBottom += indicatorMargin;
 
-  var smooth = 2 / (1 + parseInt(emaPeriod));
-  var smooth2 = 2 / (1 + parseInt(ema2Period));
-  var macdSmooth = 2 / (1 + 9);
-  var ema12Smooth = 2 / (1 + 12);
-  var ema26Smooth = 2 / (1 + 26);
-
-  var prevEmaEntry = 0;
-  var prevMacdEntry = 0;
-  var prevEma12Entry = 0;
-  var prevEma26Entry = 0;
-
-  var macdEntry = 0;
-  var ema12Entry = 0;
-  var ema26Entry = 0;
   var high, low, open, close, volume;
   var chartHigh, chartLow;
   var top = 0,
@@ -161,9 +139,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   var greenColor = "#339349";
   var redColor = "#a42015";
   var emaColor = "rgb(210,200,130)";
-  // var ema2Color = "rgb(200,150,230)";
-  // var smaColor = "rgba(30,60,190,0.7)";
-  // var fibLineColor = "rgba(175,100,100,0.75)";
 
   if (right > 1) right = 1;
   if (left >= right)left = right - 0.001;
@@ -292,33 +267,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   }
   lineRangeBottom = lineBottom;
 
-  // for (var i = 0; i < start; i++) {
-  //   if (!(data[i] instanceof Object)) {
-  //     delete data[i];
-  //     continue;
-  //   }
-  //   close = data[i].close;
-  //
-  //   if (prevEmaEntry == 0) prevEmaEntry = close;
-  //   emaEntry = (close * smooth) + (prevEmaEntry * (1 - smooth));
-  //   prevEmaEntry = emaEntry;
-  //
-  //   if (prevEma12Entry == 0)prevEma12Entry = close;
-  //   ema12Entry = (close * ema12Smooth) + (prevEma12Entry * (1 - ema12Smooth));
-  //   prevEma12Entry = ema12Entry;
-  //
-  //   if (prevEma26Entry == 0)prevEma26Entry = close;
-  //   ema26Entry = (close * ema26Smooth) + (prevEma26Entry * (1 - ema26Smooth));
-  //   prevEma26Entry = ema26Entry;
-  //
-  //   macdClose = prevEma12Entry-prevEma26Entry;
-  //   if (prevMacdEntry == 0)prevMacdEntry = macdClose;
-  //   macdEntry = (macdClose * macdSmooth) + (prevMacdEntry * (1 - macdSmooth));
-  //   prevMacdEntry = macdEntry;
-  // }
-
-  // ctx.beginPath();
-  // ctx.moveTo(marginLeft, height - (prevEmaEntry * vScale) + shft);
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
     if (!(data[i] instanceof Object)) {
@@ -364,14 +312,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
     y = Math.floor(y);
     h = Math.floor(h);
     ctx.fillRect(x + marginLeft, y + shft, candleWidth, h);
-    // if (prevEmaEntry == 0){
-    //   prevEmaEntry = close;
-    //   ctx.moveTo(marginLeft, height - (prevEmaEntry * vScale) + shft);
-    // }
-    // emaEntry = (close * smooth) + (prevEmaEntry * (1 - smooth));
-    // prevEmaEntry = emaEntry;
-    // ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (emaEntry *
-    //   vScale) + shft);
     var date = new Date(data[i].date * 1000);
     timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" + (
       "0" + date.getUTCMinutes()).slice(-2);
@@ -398,48 +338,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   ctx.strokeStyle = emaColor;
   if (showEma) ctx.stroke();
 
-  // var iiStart = start - smaPeriod;
-  // var smaCount = 0;
-  // var sma = 0;
-  // if (iiStart < 0) iiStart = 0;
-  // for (var ii = iiStart; ii < start; ii++) {
-  //   sma += data[ii].close
-  //   smaCount++;
-  // }
-  // sma = sma / smaCount;
-  // bBand1.push(sma - (sd * 2));
-  // bBand2.push(sma + (sd * 2));
-  // ctx.beginPath();
-  // ctx.moveTo(marginLeft, height - (sma * vScale) + shft);
-  // count = 0;
-  // for (var i = start; i < end; i++) {
-  //   iiStart = i - smaPeriod;
-  //   smaCount = 0;
-  //   sma = 0;
-  //   if (iiStart < 0) iiStart = 0;
-  //   for (var ii = iiStart; ii <= i; ii++) {
-  //     sma += data[ii].close
-  //     smaCount++;
-  //   }
-  //   sma = sma / smaCount;
-  //   x = (count * candleWidth) + (count * candleSpacing);
-  //   ctx.lineTo(x + marginLeft + (candleWidth / 2), height - (sma *
-  //     vScale) + shft);
-  //   if (bollingerBand) {
-  //     // Standard Deviation
-  //     sd = 0;
-  //     for (var ii = iiStart; ii <= i; ii++) {
-  //       sd += (data[ii].close - sma) * (data[ii].close - sma);
-  //     }
-  //     sd = Math.sqrt(sd / smaCount);
-  //     bBand1.push(sma - (sd * 2));
-  //     bBand2.push(sma + (sd * 2));
-  //   }
-  //   count++;
-  // }
-  // ctx.strokeStyle = smaColor;
-  // if (showSma) ctx.stroke();
-
   returnArray['detectArray'] = detectArray;
   returnArray['high'] = chartHigh;
   returnArray['low'] = chartLow;
@@ -448,255 +346,7 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   returnArray['decimals'] = decimals;
   returnArray['mainChartHeight'] = (height - paddingBottom)/scaleFactor;
   returnArray['indicatorHeight'] = indicatorMargin/scaleFactor;
-  // returnArray['macdRange'] = macdRange;
   return returnArray;
-}
-
-function depthChart(canvasId, data, dark) {
-  var c = document.getElementById(canvasId);
-  var ctx = c.getContext("2d");
-  var scaleFactor = backingScale();
-
-  if (scaleFactor > 1) {
-    if (c.style.width < 10) {
-      c.style.width = c.width;
-      c.style.height = c.height;
-      c.width = c.width * scaleFactor;
-      c.height = c.height * scaleFactor;
-      var ctx = c.getContext("2d");
-    }
-  }
-  var width = c.width;
-  var height = c.height;
-  // trace('depthChart: ' + width + ', ' + height);
-  var marginLeft = 45 * scaleFactor;
-  var marginBottom = 10 * scaleFactor;
-  var paddingBottom = 10 * scaleFactor;
-  var marginTop = 10 * scaleFactor;
-  var marginRight = 20 * scaleFactor;
-
-  marginRight = 0;
-  marginTop = 0;
-  marginBottom =  2 * scaleFactor;
-  paddingBottom = 11 * scaleFactor;
-
-  var high = 0;
-  var bids = data.bids;
-  var asks = data.asks;
-  var totalBidVol = 0;
-  var totalAskVol = 0;
-  var totalBidVolBase = 0;
-  var totalAskVolBase = 0;
-  var vScale, hScale;
-  var vShift = marginBottom + paddingBottom;
-  var h, v;
-  var depthDetectArrayBids = new Array();
-  var depthDetectArrayAsks = new Array();
-  if (dark) {
-    var borderColor = "#1f3232";
-    var asksStrokeColor = '#b32119'; //red
-    var asksAreaColor = 'rgba(179, 33, 25, 0.25)';
-    var bidsStrokeColor = '#117e1a';
-    var bidsAreaColor = 'rgba(17, 126, 26, 0.25)';
-    var lineColor = '#1f3232';
-    var textColor = "#6f9397";
-  } else {
-    var borderColor = "#91abac";
-    var asksStrokeColor = '#a42015';
-    var asksAreaColor = 'rgba(164, 32, 21, 0.3)';
-    var bidsStrokeColor = '#339349';
-    var bidsAreaColor = 'rgba(51, 147, 73, 0.3)';
-    var lineColor = '#c1d0d0';
-    var textColor = "#1e2324";
-  }
-
-  // horiz lines
-  ctx.lineWidth = 3 * scaleFactor;
-  var size = Math.floor((10 * scaleFactor)).toString();
-  ctx.font = size + "px Arial";
-  if (bids.length < 1) return;
-  ctx.clearRect(0, 0, width, height);
-  if (!(bids[0] instanceof Array)) return;
-  if (!(asks[0] instanceof Array)) return;
-  hScale = ((width - marginLeft - marginRight) / 2) / ((asks[0][0] + bids[
-      0][0]) / 2);
-  for (var i = 0; i < bids.length; i++) {
-    if ((i > (bids.length - (bids.length / 10))) && bids.length > 5 &&
-      bids[i][1] > totalBidVol / 2) continue;
-    totalBidVol += bids[i][1];
-  }
-  for (var i = 0; i < asks.length; i++) {
-    if ((asks[i][0] * hScale) > (width - marginLeft - marginRight))
-      continue;
-    totalAskVol += asks[i][1];
-  }
-  if (high < ((totalAskVol + totalBidVol) / 2)) high = ((totalAskVol +
-  totalBidVol) / 2);
-  if (high > Math.min(totalAskVol,totalBidVol)*2)high = Math.min(totalAskVol,totalBidVol)*2;
-  vScale = (height - marginBottom - marginTop) / high;
-  var roundLength = Math.pow(10, (Math.floor(high).toString().length - 3));
-  if (roundLength < 1) roundLength = 1;
-
-  var firstBid = bids[0][0];
-  var lastBid = bids[bids.length-1][0];
-  var firstAsk = asks[0][0]
-  var lastAsk = asks[asks.length-1][0];
-  var range = lastAsk - lastBid;
-  // hScale /= 2;
-
-  // trace('high is ' + high + ', range is ' + range);
-  // trace('bids from ' + firstBid + ' to ' + lastBid)
-  // trace('asks from ' + firstAsk + ' to ' + lastAsk);
-  // console.log(bids, asks);
-
-  // var count = 1;
-  // for (var i = 0; i < high; i += (high / 4)) {
-  //   roundedI = Math.floor(i / roundLength) * roundLength;
-  //   h = marginLeft;
-  //   w = width - marginLeft - marginRight;
-  //   h = 0;
-  //   w = width;
-  //   v = height - vShift - (roundedI * vScale);
-  //   ctx.fillStyle = lineColor;
-  //   // bottom line darker
-  //   if (count++ === 1) { ctx.fillStyle = borderColor;}
-  //   // trace('h line ' + count)
-  //   ctx.fillRect(h, v, w, 1);
-  //   ctx.fillStyle = textColor;
-  //   ctx.fillText(roundedI, 0, v - 3);
-  //   // trace(i + ', ' + roundedI);
-  // }
-
-  // vertical lines
-  var priceWidth = (width - marginLeft - marginRight) / hScale;
-  var start = ((asks[0][0] + bids[0][0]) / 2) - (((width - marginLeft -
-    marginRight) / 2) / hScale);
-  // start = bids[bids.length-1][0] / hScale;
-  for (var i = 0; i < priceWidth; i += 100*scaleFactor/hScale) {
-    // for (var i = lastBid; i <= lastAsk; i += (range / 8)) {
-    var decimals = 2;
-    var counter = 1;
-    while (parseFloat(i.toFixed(counter)) == 0 && decimals < 8) {
-      decimals++;
-      counter++;
-    }
-    if (i == 0) decimals = 4;
-    var fixed = decimals + 2;
-    if (fixed > 8) fixed = 8;
-    var roundedI = parseFloat(i.toFixed(decimals)).toFixed(fixed);
-    var roundedText = (i + start);
-    roundedText = parseFloat(roundedText.toFixed(decimals)).toFixed(
-      fixed);
-    h = marginLeft + roundedI * hScale;
-    // trace(i + ' : ' + roundedText + ' | ' + hScale);
-    ctx.fillStyle = lineColor;
-    ctx.fillRect(h, marginTop, 1, height - vShift - marginTop);
-    ctx.fillStyle = textColor;
-    ctx.fillText(roundedText, h - (8 * (decimals + 1)), height -
-      marginBottom);
-  }
-
-  // // bids
-  // totalBidVol = bids[0][1];
-  // totalBidVolBase = bids[0][0] * bids[0][1];
-
-  // // bids fill area
-  // ctx.beginPath();
-  // // ctx.moveTo(marginLeft, height - vShift);
-  // h = bids[0][0] * hScale + marginLeft;
-  // v = height - (totalBidVol *
-  //   vScale) - vShift;
-  // ctx.moveTo(h, height - vShift);
-  // ctx.lineTo(h, v);
-  // depthDetectArrayBids[0] = {'h': h / scaleFactor,'v': v / scaleFactor,'rate': bids[0][0],'quoteSum': totalBidVol,'baseSum': totalBidVolBase};
-  // var lastV = v;
-  // var lastH = h;
-  // for (var i = 1; i < bids.length; i++) {
-  //   totalBidVol += bids[i][1];
-  //   totalBidVolBase += bids[i][0] * bids[i][1];
-  //   h = bids[i][0] * hScale;
-  //   v = height - (totalBidVol * vScale);
-  //   if (h > (width - marginLeft - marginRight)) continue;
-  //   ctx.lineTo(h + marginLeft, v - vShift);
-  //   lastV = v - vShift;
-  //   lastH = h + marginLeft;
-  //   depthDetectArrayBids[i] = {'h': (h + marginLeft) / scaleFactor,'v': (v - vShift) / scaleFactor,'rate': bids[i][0],'quoteSum': totalBidVol,'baseSum': totalBidVolBase};
-  // }
-  //
-  // ctx.lineTo(marginLeft, lastV);
-  // ctx.strokeStyle = bidsStrokeColor;
-  // ctx.stroke();
-  // ctx.lineTo(marginLeft, height - vShift);
-  // ctx.fillStyle = bidsAreaColor;
-  // ctx.fill();
-
-  // // asks area
-  // totalAskVol = asks[0][1];
-  // totalAskVolBase = asks[0][0] * asks[0][1];
-  //
-  // ctx.beginPath();
-  // var startX = asks[0][0] * hScale + marginLeft;
-  // var startY = height - vShift;
-  // v = height - (totalAskVol *
-  //   vScale) - vShift;
-  // ctx.moveTo(startX, startY);
-  // ctx.lineTo(startX, v);
-  // depthDetectArrayAsks[0] = {'h': startX / scaleFactor,'v': v / scaleFactor,'rate': asks[0][0],'quoteSum': totalAskVol,'baseSum': totalAskVolBase};
-  // var lastH;
-  // var lastV;
-  // for (var i = 1; i < asks.length; i++) {
-  //   totalAskVol += asks[i][1];
-  //   totalAskVolBase += asks[i][0] * asks[i][1];
-  //   h = asks[i][0] * hScale;
-  //   v = height - (totalAskVol * vScale);
-  //   if (h < 0) continue;
-  //   var plotX = h + marginLeft;
-  //   var plotY = v - vShift;
-  //   var maxX = width - marginLeft;
-  //   // trace(i + ' : ' + Math.round(h) + ' : ' + maxX);
-  //   lastH = plotX;
-  //   lastV = plotY;
-  //   if (h > maxX) {
-  //     // trace('ask area beyond width: ' +  Math.round(lastH) +  ', ' + Math.round(lastV));
-  //     lastV = plotY;
-  //     ctx.lineTo(width, lastV);
-  //     h = maxX;
-  //     break;
-  //   }
-  //   ctx.lineTo(plotX, plotY);
-  //   depthDetectArrayAsks[i] = {'h': (h + marginLeft) / scaleFactor,'v': (v - vShift) / scaleFactor,'rate': asks[i][0],'quoteSum': totalAskVol,'baseSum': totalAskVolBase};
-  //   //trace('draw ask ' + Math.round(h + marginLeft) + ', ' + (asks[i][0]));
-  // }
-  // // ctx.lineTo(width, lastV);
-  // // ctx.lineTo(width, startY);
-  // ctx.lineTo(width, v);
-  // ctx.strokeStyle = asksStrokeColor;
-  // ctx.stroke();
-  // ctx.lineTo(width, startY);
-  // ctx.lineTo(startX, startY);
-  // ctx.fillStyle = asksAreaColor;
-  // ctx.fill();
-
-
-
-  // /// asks line, original
-  // if (false){
-  //   totalAskVol = asks[0][1];
-  //   ctx.beginPath();
-  //   ctx.moveTo(asks[0][0] * hScale + marginLeft, height - vShift);
-  //   ctx.lineTo(asks[0][0] * hScale + marginLeft, height - (totalAskVol * vScale) - vShift);
-  //   for (var i = 1; i < asks.length; i++) {
-  //     totalAskVol += asks[i][1];
-  //     h = asks[i][0] * hScale;
-  //     v = height - (totalAskVol * vScale);
-  //     if (h < 0) continue;
-  //     ctx.lineTo(h + marginLeft, v - vShift);
-  //   }
-  //   ctx.strokeStyle = asksStrokeColor;
-  //   ctx.stroke();
-  // }
-
-  return {'bids':depthDetectArrayBids,'asks':depthDetectArrayAsks};
 }
 
 function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
