@@ -67,7 +67,7 @@ export const ViewModel = DefineMap.extend({
 
   /**
    * @function sizeTo
-   * Changes candlestick size to the given value, in seconds.
+   * A click handler for changing candlestick size.
    *
    * @param {Number} seconds
    * The size of a candlestick
