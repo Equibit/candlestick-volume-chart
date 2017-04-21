@@ -10,7 +10,7 @@ function backingScale() {
   return 1;
 }
 
-export function preview(canvasId, data, gutterWidth) {
+export function preview(canvasId, data, gutterWidth, colors) {
   if (data === undefined) { return false; }
   var c = document.getElementById(canvasId);
   var ctx = c.getContext("2d");
@@ -62,15 +62,16 @@ export function preview(canvasId, data, gutterWidth) {
     x = (i / data.length) * width;
     ctx.lineTo(x + gutterWidth, height - (close * vScale) + shft);
   }
-  ctx.strokeStyle = "#084044";
+  ctx.strokeStyle = colors.preview;
 
   ctx.stroke();
 }
 
-export default function candlestick(canvasId, data, left, right, candlestickPeriod,
-                                    bollingerBand, mobile) {
-  if (data === undefined) { return false;}
-  if (mobile === undefined)mobile = false;
+export default function candlestick (canvasId, data, left, right, candlestickPeriod, colors, mobile = false) {
+  if (!data) {
+    return false;
+  }
+
   var c = document.getElementById(canvasId);
   var ctx = c.getContext("2d");
   var scaleFactor = window.devicePixelRatio;
@@ -126,15 +127,7 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   //trace(canvasId + ' w = ' + width + ', h = ' + height + ' ; d=' +dark);
 
   // Colors:
-  var borderColor = "#91abac";
-  var wickColor = "#223535";
-  var textColor = "#1e2324";
-  var hLineColor =  "#e9f0f0";
-  var vLineColor = "#e9f0f0";
-  var volumeColor = "#b5c8c9";
-  var greenColor = "#339349";
-  var redColor = "#a42015";
-  var emaColor = "rgb(210,200,130)";
+  let { borderColor, wickColor, textColor, hLineColor, vLineColor, volumeColor, greenColor, redColor } = colors;
 
   if (right > 1) right = 1;
   if (left >= right)left = right - 0.001;
@@ -275,12 +268,13 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
     close = data[i].close;
     volume = data[i].volume;
     ctx.fillStyle = volumeColor;
+    let candlestickColor = close > open ? greenColor : redColor;
     x = (count * candleWidth) + (count * candleSpacing) - 1;
     w = candleWidth + (candleSpacing / 2);
     h = Math.floor(volume * volScale);
     y = height - h;
     ctx.fillRect(x + marginLeft, y - paddingBottom, w, h);
-    ctx.fillStyle = wickColor;
+    ctx.fillStyle = wickColor || candlestickColor;
     x = (count * candleWidth) + (count * candleSpacing) + (candleWidth /
       2) - (wickWidth / 2);
     y = height - (high * vScale);
@@ -292,12 +286,12 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
     if (close > open) {
       y = height - (close * vScale);
       h = (close - open) * vScale;
-      ctx.fillStyle = greenColor;
+      ctx.fillStyle = candlestickColor;
     }
     if (close < open) {
       y = height - (open * vScale);
       h = (open - close) * vScale;
-      ctx.fillStyle = redColor;
+      ctx.fillStyle = candlestickColor;
     }
     if (close == open) {
       y = height - (open * vScale);

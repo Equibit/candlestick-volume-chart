@@ -3,6 +3,7 @@ import DefineMap from 'can-define/map/map';
 import view from './template.stache';
 import './style.less';
 import render, { init, chartSnapZoom } from './chart';
+import colors from './colors';
 
 export const ViewModel = DefineMap.extend({
   /**
@@ -25,6 +26,15 @@ export const ViewModel = DefineMap.extend({
   candlestickSize: 'number',
 
   /**
+   * @property {Object} colors
+   * Colors for the chart.
+   */
+  colors: {
+    type: '*',
+    value: colors
+  },
+
+  /**
    * @property {Boolean} isInitialized
    * Indicates whether the chart was initialized.
    */
@@ -37,7 +47,9 @@ export const ViewModel = DefineMap.extend({
    * Initializes chart (size, mouse events, etc).
    */
   initChart () {
-    init();
+    init({
+      colors: this.colors
+    });
     this.isInitialized = true;
   },
 

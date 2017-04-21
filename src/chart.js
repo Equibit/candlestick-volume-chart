@@ -1,6 +1,8 @@
 // import 'jquery-ui/ui/widgets/draggable';
 import candlestick, { preview } from './candlestick';
 
+let colors;
+
 var primaryCurrency = 'BTC';
 var secondaryCurrency = 'LTC';
 
@@ -16,14 +18,7 @@ var handleWidth;
 var returnArray = [];
 var detectArray = [];
 var chartData, range;
-var smaPeriod =50;
-var emaPeriod =30;
-var ema2Period =20;
-var showSma = false;
-var showEma = false;
-var showFib=false;
 var bollingerBand=false;
-var showEma2=false;
 var dataByPeriod = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
 var candlestickPeriod = 1800;
 var chartsJsLoaded = false;
@@ -64,8 +59,7 @@ export function chartSnapZoom(hours) {
     'width': (right - left) + handleWidth*2
   });
 
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent,
-    candlestickPeriod, bollingerBand);
+  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
 
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
@@ -80,7 +74,7 @@ export function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, bollingerBand);
+  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;
@@ -121,7 +115,7 @@ function refreshChart() {
   changeCandlestickZoom(leftPercent, rightPercent);
 
   // The bottom Zoom control (preview of all data):
-  preview('previewCanvas', chartData, handleWidth);
+  preview('previewCanvas', chartData, handleWidth, colors);
 }
 
 function changecandlestickPeriod(candlestickPeriod) {
@@ -430,8 +424,9 @@ function initChartMouseover() {
   });
 }
 
-export function init() {
+export function init (options) {
   console.log('Chart:init()');
+  colors = options.colors;
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;
