@@ -1,20 +1,43 @@
-<script type="text/stache" id="demo-html" can-autorender>
+<script type="text/stache" id="demo-html">
   <can-import from="~/candlestick-volume-chart" />
 
   Chart:
-  <candlestick-volume-chart {data}="data" />
+  <candlestick-volume-chart {chart-data}="chartData" {(candlestick-size)}="candlestickSize" />
 </script>
 
 <script src="../../node_modules/jquery/dist/jquery.js"></script>
 <script src="./lib/jquery-ui.min.js"></script>
 <script src="../../node_modules/steal/steal.js"
-        main="can-view-autorender">
+        main="@empty">
   import canViewModel from 'can-view-model';
-//  import $ from 'jquery';
+  // import $ from 'jquery';
+  import stache from 'can-stache';
+  import DefineMap from 'can-define/map/map';
+  import 'can-view-import';
+  import '~/candlestick-volume-chart';
 
-  $.get('data-small.json').then(data => {
-    canViewModel(document.getElementById('demo-html')).set({
-      data
-    });
+  let template = stache.from('demo-html');
+  let VM = DefineMap.extend({
+    chartData: {
+      type: '*'
+    },
+    candlestickSize: {
+      set (val) {
+        setTimeout(() => {
+          this.loadData(val);
+        }, 0);
+        return val;
+      }
+    },
+    loadData (candlestickSize) {
+      console.log(`loadData(${candlestickSize})`);
+      $.get(candlestickSize < 1000 ? 'data-1.json' : 'data-2.json').then(chartData => {
+        console.log(`loadedData(${chartData.length})`);
+        this.chartData = chartData;
+      });
+    }
   });
+  let vm = new VM({candlestickSize: 7200});
+  let frag = template(vm);
+  document.body.appendChild(frag);
 </script>

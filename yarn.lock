@@ -453,7 +453,7 @@ can-view-callbacks@^3.0.0, can-view-callbacks@^3.0.2, can-view-callbacks@^3.0.3:
     can-observation "^3.0.1"
     can-util "^3.0.1"
 
-can-view-import@^3.0.3:
+can-view-import@^3.0.3, can-view-import@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/can-view-import/-/can-view-import-3.0.6.tgz#b05f9f4dbe41adbb437ce143ed7a3ee03c9c453c"
   dependencies:

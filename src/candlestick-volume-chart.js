@@ -8,7 +8,7 @@ export const ViewModel = DefineMap.extend({
   /**
    * @property {Array} data
    */
-  data: {
+  chartData: {
     type: '*',
     set (val) {
       setTimeout(() => {
@@ -47,7 +47,7 @@ export const ViewModel = DefineMap.extend({
    *
    * @param {Array} data
    */
-  drawChart (data = this.data) {
+  drawChart (data = this.chartData) {
     if (!this.isInitialized){
       return;
     }
