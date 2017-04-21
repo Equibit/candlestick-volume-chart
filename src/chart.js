@@ -65,8 +65,7 @@ export function chartSnapZoom(hours) {
   });
 
   returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent,
-    candlestickPeriod, smaPeriod, emaPeriod, ema2Period, showSma,
-    showEma, showEma2, showFib, bollingerBand);
+    candlestickPeriod, bollingerBand);
 
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
@@ -81,7 +80,7 @@ export function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, smaPeriod, emaPeriod, ema2Period, showSma, showEma, showEma2, showFib, bollingerBand);
+  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, bollingerBand);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;

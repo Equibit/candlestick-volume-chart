@@ -21,7 +21,7 @@ export function preview(canvasId, data, gutterWidth) {
       c.style.height = c.height;
       c.width = c.width * scaleFactor;
       c.height = c.height * scaleFactor;
-      var ctx = c.getContext("2d");
+      ctx = c.getContext("2d");
     }
   }
   gutterWidth *= scaleFactor;
@@ -67,14 +67,10 @@ export function preview(canvasId, data, gutterWidth) {
   ctx.stroke();
 }
 
-export default function candlestick(canvasId, data, left, right, candlestickPeriod, smaPeriod,
-                     emaPeriod, ema2Period, showSma, showEma, showEma2, showFib,
-                     bollingerBand,mobile) {
+export default function candlestick(canvasId, data, left, right, candlestickPeriod,
+                                    bollingerBand, mobile) {
   if (data === undefined) { return false;}
   if (mobile === undefined)mobile = false;
-  if (smaPeriod < 1) smaPeriod = 1;
-  if (emaPeriod < 1) emaPeriod = 1;
-  if (ema2Period < 1) ema2Period = 1;
   var c = document.getElementById(canvasId);
   var ctx = c.getContext("2d");
   var scaleFactor = window.devicePixelRatio;
@@ -335,8 +331,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   }
   // trace('create detectArray (' + detectArray.length + '), ' + detectArray[detectArray.length-1].right);
   // trace('scale is ' + scaleFactor);
-  ctx.strokeStyle = emaColor;
-  if (showEma) ctx.stroke();
 
   returnArray['detectArray'] = detectArray;
   returnArray['high'] = chartHigh;
