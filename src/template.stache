@@ -15,10 +15,14 @@
       <canvas id="previewCanvas" width="2016" height="100" style="width: 1008px;"></canvas>
       <div id="chartBounds" class="ui-draggable ui-draggable-handle" style="width: 188px; left: 477.375px; right: auto; top: 0px;"></div>
       <div class="chartBoundsContainer" id="chartBoundsRightContainer" style="padding-left: 485.375px;">
-        <div id="chartBoundsRight" class="ui-draggable ui-draggable-handle" style="left: 657.375px; width: 8px; right: auto; top: -1px;"></div>
+        <div id="chartBoundsRight" class="zoom-btn ui-draggable ui-draggable-handle" style="left: 657.375px;">
+          ||<div class="vertical-top"></div><div class="vertical-bottom"></div>
+        </div>
       </div>
       <div class="chartBoundsContainer" id="chartBoundsLeftContainer" style="padding-right: 350.625px;">
-        <div id="chartBoundsLeft" class="ui-draggable ui-draggable-handle" style="left: 477.375px;"></div>
+        <div id="chartBoundsLeft" class="zoom-btn ui-draggable ui-draggable-handle" style="left: 477.375px;">
+          ||<div class="vertical-top"></div><div class="vertical-bottom"></div>
+        </div>
       </div>
     </div>
   </div>
