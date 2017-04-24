@@ -15,6 +15,9 @@ var chartCanvasWidth = 1000;
 var chartCanvasWidthPrev = chartCanvasWidth;
 var handleWidth;
 
+var ch = 200;
+var zh = 50;
+
 var returnArray = [];
 var detectArray = [];
 var chartData, range;
@@ -95,9 +98,6 @@ function getChartWidth(){
 
 function refreshChart() {
   var cw = getChartWidth();
-  var ch = 450;
-  var dh = 200;
-  var zh = 50;
 
   $('#zoomDiv, #previewCanvas, #chart30Canvas, #canvasContainer')
     .attr({width: cw})
@@ -427,6 +427,7 @@ function initChartMouseover() {
 export function init (options) {
   console.log('Chart:init()');
   colors = options.colors;
+  ch = options.height;
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;

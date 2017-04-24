@@ -1,18 +1,49 @@
 <div class="bigChart">
   <div class="chart">
-    <div id="chartLoading"><p><i class="fa fa-refresh fa-spin"></i> Loading chart...</p></div>
-    <div id="canvasContainer" width="1008" style="width: 1008px; height: 450px;">
-      <canvas id="chart30Canvas" width="2016" height="900" style="width: 1008px; height: 450px;"></canvas>
-      <div class="chartInfoDiv" id="mainChartInfo" style="display: block;"><table class="mainChartInfoTable"><tbody><tr><td class="description">Open:</td><td>0.01722888</td><td>&nbsp;</td><td class="description">Close:</td><td>0.01872492</td><td>&nbsp;</td><td class="description">High:</td><td>0.01950000</td><td>&nbsp;</td><td class="description">Low:</td><td>0.01715000</td></tr><tr><td class="description">Wtd Avg:</td><td>0.01845686</td><td>&nbsp;</td><td class="description">Vol (BTC):</td><td>43290.</td><td>&nbsp;</td><td class="description">Vol (ETH):</td><td>2345511</td><td>&nbsp;</td><td class="description">Date:</td><td>Jul 20  00:00</td></tr></tbody></table></div>
-      <div id="crosshairHInfo" style="margin-top: -12px; top: 125px; display: block;">
+    <div id="chartLoading"><p><i class="icon icon-clock"></i>Loading data...</p></div>
+    <div id="canvasContainer">
+      <canvas id="chart30Canvas"></canvas>
+      <div class="chartInfoDiv" id="mainChartInfo">
+        <table class="mainChartInfoTable">
+          <tbody>
+            <tr>
+              <td class="description">Open:</td>
+              <td>0.01722888</td>
+              <td>&nbsp;</td>
+              <td class="description">Close:</td>
+              <td>0.01872492</td>
+              <td>&nbsp;</td>
+              <td class="description">High:</td>
+              <td>0.01950000</td>
+              <td>&nbsp;</td>
+              <td class="description">Low:</td>
+              <td>0.01715000</td>
+            </tr>
+            <tr>
+              <td class="description">Wtd Avg:</td>
+              <td>0.01845686</td>
+              <td>&nbsp;</td>
+              <td class="description">Vol (BTC):</td>
+              <td>43290.</td>
+              <td>&nbsp;</td>
+              <td class="description">Vol (ETH):</td>
+              <td>2345511</td>
+              <td>&nbsp;</td>
+              <td class="description">Date:</td>
+              <td>Jul 20  00:00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="crosshairHInfo">
         <div id="crosshairHInfoTextContainer">0.02265</div>
       </div>
-      <div id="chartCrosshairH" style="top: 125px; display: block;"></div>
-      <div id="chartCrosshairV" style="left: 427.724px; display: block;"></div>
+      <div id="chartCrosshairH"></div>
+      <div id="chartCrosshairV"></div>
     </div>
 
-    <div id="zoomDiv" width="1008" style="width: 1008px;">
-      <canvas id="previewCanvas" width="2016" height="100" style="width: 1008px;"></canvas>
+    <div id="zoomDiv">
+      <canvas id="previewCanvas"></canvas>
       <div id="chartBounds" class="ui-draggable ui-draggable-handle"></div>
       <div class="chartBoundsContainer" id="chartBoundsRightContainer">
         <div id="chartBoundsRight" class="zoom-btn ui-draggable ui-draggable-handle">

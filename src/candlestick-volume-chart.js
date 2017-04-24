@@ -34,6 +34,10 @@ export const ViewModel = DefineMap.extend({
     value: colors
   },
 
+  chartHeight: {
+    value: 200
+  },
+
   /**
    * @property {Boolean} isInitialized
    * Indicates whether the chart was initialized.
@@ -48,7 +52,8 @@ export const ViewModel = DefineMap.extend({
    */
   initChart () {
     init({
-      colors: this.colors
+      colors: this.colors,
+      height: this.chartHeight
     });
     this.isInitialized = true;
   },
