@@ -17,6 +17,7 @@ var handleWidth;
 
 var ch = 200;
 var zh = 50;
+var chartHoverInfo;
 
 var returnArray = [];
 var detectArray = [];
@@ -358,15 +359,12 @@ function initChartMouseover() {
           }
         }
 
-        var chartInfoString = "<table class='mainChartInfoTable'><tr><td class='description'>Open:</td><td>" + info.open.toFixed(8) + "</td><td>&nbsp;</td>"
-          + "<td class='description'>Close:</td><td>" + info.close.toFixed(8) + "</td><td>&nbsp;</td>"
-          + "<td class='description'>High:</td><td>" + info.high.toFixed(8) + "</td><td>&nbsp;</td>"
-          + "<td class='description'>Low:</td><td>" + info.low.toFixed(8) + "</td></tr>"
-          + "<tr><td class='description'>Wtd Avg:</td><td>" + info.weightedAverage.toFixed(8) + "</td><td>&nbsp;</td>"
-          + "<td class='description'>" + "Vol (" + primaryCurrency + "):</td><td>" + volumeString + "</td><td>&nbsp;</td>"
-          + "<td class='description'>" + "Vol (" + secondaryCurrency + "):</td><td>" + quoteVolumeString + "</td><td>&nbsp;</td>"
-          + "<td class='description'>Date:</td><td>" + info.date + "</td></tr></table>";
-        $("#mainChartInfo").empty().append(chartInfoString);
+        chartHoverInfo.open = info.open.toFixed(8);
+        chartHoverInfo.close = info.close.toFixed(8);
+        chartHoverInfo.volumePrimary = volumeString;
+        chartHoverInfo.volumeSecondary = quoteVolumeString;
+        chartHoverInfo.date = info.date
+        chartHoverInfo.isVisible = true;
         break;
       }
     }
@@ -391,19 +389,6 @@ function initChartMouseover() {
     } else {
       $('#crosshairHInfo').css('margin-top','-' + $('#crosshairHInfo').css('height'));
     }
-    /*
-     if(e.pageX < 200){
-     if ($('#mainChartInfo').css != 175){
-     $('#mainChartInfo').css('margin-left',175);
-     }
-     } else {
-     if ($('#mainChartInfo').css != 10){
-     $('#mainChartInfo').css('margin-left',10);
-     }
-     }
-     */
-    //$('#mainChartInfo').css('left', l).css('top', e.pageY - 125).css('display', 'block');
-    $('#mainChartInfo').css('display', 'block');
     $('#indicatorInfo').css('top', mainChartHeight+1).css('display', 'block');
     $('#chartCrosshairV').css('left', crosshairH).css('display', 'block');
     if (crosshairV > (mainChartHeight + indicatorHeight) | crosshairV<-1){
@@ -416,7 +401,7 @@ function initChartMouseover() {
 
   });
   $('#canvasContainer').mouseout(function() {
-    $('#mainChartInfo').css('display', 'none');
+    chartHoverInfo.isVisible = false;
     $('#indicatorInfo').css('display', 'none');
     $('#crosshairHInfo').css('display', 'none');
     $('#chartCrosshairH').css('display', 'none');
@@ -428,6 +413,7 @@ export function init (options) {
   console.log('Chart:init()');
   colors = options.colors;
   ch = options.height;
+  chartHoverInfo = options.chartHoverInfo;
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;

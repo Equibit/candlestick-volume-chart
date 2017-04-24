@@ -3,8 +3,9 @@
 <script type="text/stache" id="demo-html">
   <can-import from="~/candlestick-volume-chart" />
 
-  Chart:
-  <candlestick-volume-chart {chart-data}="chartData" {(candlestick-size)}="candlestickSize" />
+  <candlestick-volume-chart {chart-data}="chartData"
+                            {(candlestick-size)}="candlestickSize"
+                            {chart-height}="chartHeight" />
 </script>
 
 <script src="../../node_modules/jquery/dist/jquery.js"></script>
@@ -22,6 +23,9 @@
   let VM = DefineMap.extend({
     chartData: {
       type: '*'
+    },
+    chartHeight: {
+      value: 200
     },
     candlestickSize: {
       set (val) {

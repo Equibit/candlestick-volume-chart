@@ -302,11 +302,8 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
     y = Math.floor(y);
     h = Math.floor(h);
     ctx.fillRect(x + marginLeft, y + shft, candleWidth, h);
+
     var date = new Date(data[i].date * 1000);
-    timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" + (
-      "0" + date.getUTCMinutes()).slice(-2);
-    dateString = month[date.getUTCMonth()] + " " + date.getUTCDate() +
-      " " + timeString;
     detectArray[count] = {
       'left': (x + marginLeft) / scaleFactor,
       'right': (x + marginLeft + candleWidth + candleSpacing) / scaleFactor,
@@ -317,7 +314,7 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
       'volume': volume,
       'quoteVolume': data[i].quoteVolume,
       'weightedAverage': data[i].weightedAverage,
-      'date': dateString
+      'date': date
     };
     count++;
     // because the canvas is 2x as wide as the div that contains it, for hi-res screens, we have to scale down the detect array elements

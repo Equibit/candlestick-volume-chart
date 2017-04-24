@@ -172,27 +172,6 @@
 }
 
 
-#mainChartInfo {
-  display: none;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 440px;
-  margin-top: 5px;
-  z-index: 20;
-  padding: 3px 6px;
-  font-size: 10px;
-  line-height: 13px;
-  pointer-events: none;
-  background-color: rgba(255, 255, 255, 0.5);
-  background-clip: padding-box;
-
-  table.mainChartInfoTable {
-    font-size: 10px;
-  }
-}
-
-
 #zoomDiv {
   position: relative;
   width: 100%;
@@ -308,5 +287,19 @@
   }
   .vertical-bottom {
     bottom: -20px;
+  }
+}
+
+chart-info {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 20;
+  pointer-events: none;
+  table {
+    font-size: 12px;
+    td:nth-child(2), td:nth-child(4), td:nth-child(6) {
+      padding-right: 5px;
+    }
   }
 }
