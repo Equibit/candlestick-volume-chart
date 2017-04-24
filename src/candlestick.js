@@ -341,6 +341,7 @@ function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTime
                             dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
                             alignYaxisRight) {
 
+  let lineCount = 0;
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
     if (!(data[i] instanceof Object)) {
@@ -348,6 +349,7 @@ function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTime
       continue;
     }
     if (timestampCount == sticksPerTimestamp) {
+      lineCount++;
       timestampCount = 0;
       var date = new Date(data[i].date * 1000);
       dateString = month[date.getUTCMonth()] + " " + date.getUTCDate();
@@ -367,7 +369,9 @@ function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTime
       x -= 13 * scaleFactor;
 
       if (alignYaxisRight) {
-        if (count > 0) {
+        // show date on every 2nd vertical line till there are less than 8 lines:
+        if (lineCount % 2 === 0 || end - start < 8) {
+          console.log(' - date ' + count);
           ctx.fillText(dateString, x, dateH);
           ctx.fillText(timeString, x, timeH);
         }
