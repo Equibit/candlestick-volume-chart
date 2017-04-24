@@ -171,7 +171,7 @@ export function initPreview() {
   $("#chartBoundsRightContainer").css('padding-left', (left) + "px");
   $("#chartBoundsRight").draggable({
     drag: function(event, ui) {
-      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
       var right = $('#chartBoundsRight').position().left;
       var maxRightHandleLeft = left;
       if (right > maxRight) right = maxRight;
@@ -195,7 +195,7 @@ export function initPreview() {
 
     containment: $('#zoomDiv'),
     stop: function(event, ui) {
-      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
       var right = $('#chartBoundsRight').position().left;
       if (right < left) right = left;
       $('#chartBoundsRight').css({
@@ -219,12 +219,12 @@ export function initPreview() {
   });
   $("#chartBoundsLeft").draggable({
     drag: function(event, ui) {
-      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
       var right = $('#chartBoundsRight').position().left;
       var maxLeftHandleRight = right;
       if (left < minLeft) left = minLeft;
       if (left > maxLeftHandleRight) {
-        left = maxLeftHandleRight - handleWidth;
+        left = maxLeftHandleRight - handleWidth * 2;
         cbl.css({left: left});
         return false;
       }
@@ -247,7 +247,7 @@ export function initPreview() {
 
     containment: $("#zoomDiv"),
     stop: function(event, ui) {
-      var left = $('#chartBoundsLeft').position().left + handleWidth;
+      var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
       var right = $('#chartBoundsRight').position().left;
       if (left > right) left = right;
       $('#chartBounds').css({
@@ -274,7 +274,7 @@ export function initPreview() {
       if (right > maxRight) right = maxRight;
       if (right < minRight) right = minRight;
       $('#chartBoundsLeft').css({
-        'left': left - handleWidth,
+        'left': left - handleWidth * 2,
       });
       $('#chartBoundsRight').css({
         'left': right,
@@ -295,7 +295,7 @@ export function initPreview() {
       if (right > maxRight) right = maxRight;
       if (right < minRight) right = minRight;
       $('#chartBoundsLeft').css({
-        'left': left - handleWidth,
+        'left': left - handleWidth * 2,
       });
       $('#chartBoundsRight').css({
         'left': right,
@@ -325,8 +325,8 @@ export function resizeCharts() {
   chartRight = chartRightPercent * (cw - handleWidth * 2);
 
   $('#chartBoundsRight').css({left: chartRight + handleWidth});
-  $('#chartBoundsLeft').css({left: chartLeft});
-  $('#chartBounds').css({width: (chartRight - chartLeft) + handleWidth*2, left:chartLeft});
+  $('#chartBoundsLeft').css({left: chartLeft - handleWidth});
+  $('#chartBounds').css({width: (chartRight - chartLeft) + handleWidth*2, left: chartLeft});
 
   initPreview();
   refreshChart();
