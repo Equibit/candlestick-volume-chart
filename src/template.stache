@@ -14,9 +14,11 @@
       </div>
       <div id="chartCrosshairH"></div>
       <div id="chartCrosshairV"></div>
+      <div class="chart-axis axis-x"></div>
+      <div class="chart-axis axis-y"></div>
     </div>
 
-    <div id="zoomDiv">
+    <div id="preview-container">
       <canvas id="previewCanvas"></canvas>
       <div id="chartBounds" class="ui-draggable ui-draggable-handle"></div>
       <div class="chartBoundsContainer" id="chartBoundsRightContainer">
@@ -33,9 +35,8 @@
   </div>
 
   <div class="chartButtons">
-    <div class="chartLoadingDiv"></div>
     <div class="group zoom">
-      <div class="name">Zoom:</div>
+      <div class="label">Zoom:</div>
       <ul class="button-group">
         <li><button class="button {{#is zoom 6}}chartButtonActive{{/is}}" ($click)="zoomTo(6)">6h</button></li>
         <li><button class="button {{#is zoom 24}}chartButtonActive{{/is}}" ($click)="zoomTo(24)">24h</button></li>
@@ -49,7 +50,7 @@
     </div>
 
     <div class="group candlesticks">
-      <div class="name">Candlesticks:</div>
+      <div class="label">Candlesticks:</div>
       <ul class="button-group">
         <li><button class="button {{#is candlestickSize 300}}chartButtonActive{{/is}}" ($click)="sizeTo(300)">5min</button></li>
         <li><button class="button {{#is candlestickSize 900}}chartButtonActive{{/is}}" ($click)="sizeTo(900)">15min</button></li>

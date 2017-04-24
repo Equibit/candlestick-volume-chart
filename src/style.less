@@ -5,7 +5,6 @@
   clear: both;
 
   .chart {
-    border: 1px solid #91abac;
     position: relative;
     width: 100%;
     margin-bottom: 20px;
@@ -144,6 +143,7 @@
         margin-right: 5px;
       }
       ul {
+        padding-left: 0;
         li {
           display: inline;
         }
@@ -172,16 +172,13 @@
 }
 
 
-#zoomDiv {
+#preview-container {
   position: relative;
   width: 100%;
   height: 50px;
-  border-top: 1px solid #91abac;
-  //background: #f4f8f8;
-  -webkit-box-shadow: inset 0 3px 8px #dfe7e7;
-  -moz-box-shadow: inset 0 3px 8px #dfe7e7;
-  box-shadow: inset 0 3px 8px #dfe7e7;
-  overflow: hidden;
+  //border-top: 1px solid @preview-top-border;
+  //overflow: hidden;
+  margin-top: 5px;
 
   #chartBounds {
     position: absolute;
@@ -209,11 +206,11 @@
 
 #chartCrosshairV {
   width: 1px;
-  height: 100%;
   top: 0px;
+  bottom: 80px;
   display: none;
   position: absolute;
-  background-color: #91abac;
+  background-color: @hover-line;
   pointer-events: none;
 }
 
@@ -223,13 +220,13 @@
   left: 0px;
   display: none;
   position: absolute;
-  background-color: #91abac;
+  background-color: @hover-line;
   pointer-events: none;
 }
 
 #crosshairHInfo {
   position: absolute;
-  right: 0px;
+  left: 0px;
   width: 59px;
   height: 12px;
   margin-top: -12px;
@@ -256,9 +253,9 @@
 
 .chartBoundsContainer .zoom-btn {
   position: absolute;
-  top: 10px!important;
+  top: 11px!important;
   cursor: ew-resize;
-  height: 25px;
+  height: 24px;
   line-height: 25px;
   font-size: 11px;
   padding: 1px;
@@ -279,21 +276,21 @@
   .vertical-top, .vertical-bottom {
     position: absolute;
     left: 3px;
-    height: 19px;
-    border-left: 1px solid @preview-border;
+    height: 12px;
+    border-left: 1px solid @preview-zoom-border;
   }
   .vertical-top {
-    top: -20px;
+    top: -12px;
   }
   .vertical-bottom {
-    bottom: -20px;
+    bottom: -12px;
   }
 }
 
 chart-info {
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 60px;
+  top: -5px;
   z-index: 20;
   pointer-events: none;
   table {
@@ -301,5 +298,21 @@ chart-info {
     td:nth-child(2), td:nth-child(4), td:nth-child(6) {
       padding-right: 5px;
     }
+  }
+}
+
+.chart-axis {
+  position: absolute;
+  &.axis-x {
+    left: 42px;
+    right: 0;
+    bottom: 80px;
+    border-top: 1px solid lightgray;
+  }
+  &.axis-y {
+    top: 0;
+    bottom: 80px;
+    left: 42px;
+    border-left: 1px solid lightgray;
   }
 }

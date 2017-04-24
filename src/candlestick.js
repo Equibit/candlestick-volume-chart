@@ -83,13 +83,12 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
       c.style.height = c.height;
       c.width = c.width * scaleFactor;
       c.height = c.height * scaleFactor;
-      var ctx = c.getContext("2d");
+      ctx = c.getContext("2d");
     }
   }
   ctx.clearRect(0, 0, c.width, c.height);
 
-  var alignYaxisRight = true;
-  // console.log('candlestick, data = ', data);
+  var alignYaxisRight = false;
 
   var width = c.width;
   var height = c.height;
@@ -143,9 +142,6 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   var returnArray = new Array();
   var detectArray = new Array();
   var month = new Array();
-  var bBand1 = [];
-  var bBand2 = [];
-  var sd;
   month[0] = "Jan";
   month[1] = "Feb";
   month[2] = "Mar";
@@ -235,7 +231,8 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
     paddingBottom -= Math.round((bottom - ((marginBottom - paddingBottom) / vScale)) * vScale);
   }
   var lineTop = top + (marginTop / vScale);
-  // horiz lines and yaxis text
+
+  // Horizontal lines and Y-axis labels:
   for (var l = lineBottom; l <= lineTop+((lineTop - lineBottom) / step)/2; l += (lineTop - lineBottom) / step) {
     ctx.fillStyle = hLineColor;
     x = marginLeft;
@@ -246,7 +243,8 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
     if (alignYaxisRight) { horizLineW = c.width; }
     ctx.fillRect(x, y + shft, horizLineW, h);
     ctx.fillStyle = textColor;
-    // move yaxis text into right margin
+
+    // move Y-axis text into right margin
     var labelPos = 0;
     if (alignYaxisRight) { labelPos = w + 5; }
     var txtYpos = y + shft - 3;

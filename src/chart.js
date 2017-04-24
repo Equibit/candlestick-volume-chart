@@ -59,8 +59,8 @@ export function chartSnapZoom(hours) {
     'left': right + handleWidth,
   });
   $('#chartBounds').css({
-    'left': left,
-    'width': (right - left) + handleWidth*2
+    'left': left + handleWidth,
+    'width': (right - left) + handleWidth
   });
 
   returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
@@ -100,7 +100,7 @@ function getChartWidth(){
 function refreshChart() {
   var cw = getChartWidth();
 
-  $('#zoomDiv, #previewCanvas, #chart30Canvas, #canvasContainer')
+  $('#preview-container, #previewCanvas, #chart30Canvas, #canvasContainer')
     .attr({width: cw})
     .css({width: cw});
 
@@ -194,7 +194,7 @@ export function initPreview() {
     cursor: 'ew-resize',
     axis: "x",
 
-    containment: $('#zoomDiv'),
+    containment: $('#preview-container'),
     stop: function(event, ui) {
       var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
       var right = $('#chartBoundsRight').position().left;
@@ -246,7 +246,7 @@ export function initPreview() {
     cursor: 'ew-resize',
     axis: "x",
 
-    containment: $("#zoomDiv"),
+    containment: $("#preview-container"),
     stop: function(event, ui) {
       var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
       var right = $('#chartBoundsRight').position().left;
@@ -309,7 +309,7 @@ export function initPreview() {
       chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
       chartRightPercent = (right - handleWidth)/(cw - handleWidth*2);
     },
-    containment: $("#zoomDiv")
+    containment: $("#preview-container")
   });
 }
 
