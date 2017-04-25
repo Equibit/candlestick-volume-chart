@@ -1,7 +1,7 @@
 {
-  "name": "candlestick-volume-chart",
-  "version": "0.0.1",
-  "main": "dist/candlestick-volume-chart.min.js",
+  "name": "@equibit/candlestick-volume-chart",
+  "version": "0.1.0",
+  "main": "dist/candlestick-volume-chart.js",
   "description": "Candlestick-volume chart",
   "homepage": "",
   "repository": {
@@ -13,8 +13,17 @@
     "email": "info@equibit.org",
     "url": "https://equibit.org"
   },
+  "scripts": {
+    "build": "node build",
+    "document": "documentjs",
+    "lint": "semistandard",
+    "lint:fix": "semistandard --fix",
+    "x-preversion": "npm run lint && npm test",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  },
   "license": "UNLICENSED",
-  "private": true,
   "files": [
     "src"
   ],
@@ -28,7 +37,8 @@
     "can-define": "^1.0.17",
     "can-stache": "^3.0.22",
     "jquery": "^3.2.1",
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1",
+    "moment": "^2.18.1"
   },
   "devDependencies": {
     "can-view-autorender": "^3.0.4",
@@ -40,9 +50,11 @@
     "steal": "^1.4.6",
     "steal-less": "^1.2.0",
     "steal-mocha": "^1.0.0",
-    "steal-stache": "^3.0.5"
+    "steal-stache": "^3.0.5",
+    "steal-tools": "^1.3.1"
   },
   "steal": {
+    "main": "src/candlestick-volume-chart.js",
     "directories": {
       "lib": "src"
     },
@@ -50,17 +62,6 @@
       "chai",
       "steal-less",
       "steal-stache"
-    ],
-    "meta": {
-      "jquery": {
-        "format": "global",
-        "exports": "$"
-      },
-      "jquery-ui/ui/widgets/draggable": {
-        "deps": [
-          "jquery"
-        ]
-      }
-    }
+    ]
   }
 }

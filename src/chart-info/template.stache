@@ -1,0 +1,22 @@
+<can-import from="~/chart-info/style.less" />
+
+<table class="{{^if data.isVisible}}hidden{{/if}}">
+  <tbody>
+    <tr>
+      <td class="label">Open</td>
+      <td>{{data.open}}</td>
+      <td class="label">Volume ({{data.currencyPrimary}})</td>
+      <td>{{data.volumePrimary}}</td>
+      <td class="label">Date</td>
+      <td>{{data.dateString}}</td>
+    </tr>
+    <tr>
+      <td class="label">Close</td>
+      <td>{{data.close}}</td>
+      <td class="label">Volume ({{data.currencySecondary}})</td>
+      <td>{{data.volumeSecondary}}</td>
+      <td class="label">Time</td>
+      <td>{{data.time}}</td>
+    </tr>
+  </tbody>
+</table>

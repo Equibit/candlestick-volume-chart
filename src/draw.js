@@ -1,76 +1,28 @@
+/**
+ * @module draw Draw chart
+ *
+ * Draw candlestick and volume charts on canvas.
+ *
+ * @param canvasId
+ * @param data
+ * @param left
+ * @param right
+ * @param candlestickPeriod
+ * @param colors
+ */
+
+import moment from 'moment';
+
 var numberOfCandles;
 var shft;
 var lineRangeTop;
 var lineRangeBottom;
 
-function backingScale() {
-  if ('devicePixelRatio' in window && window.devicePixelRatio > 1)
-    return window.devicePixelRatio;
-
-  return 1;
-}
-
-export function preview(canvasId, data, gutterWidth) {
-  if (data === undefined) { return false; }
-  var c = document.getElementById(canvasId);
-  var ctx = c.getContext("2d");
-  var scaleFactor = window.devicePixelRatio;
-  if (scaleFactor > 1) {
-    if (c.style.width < 10) {
-      c.style.width = c.width;
-      c.style.height = c.height;
-      c.width = c.width * scaleFactor;
-      c.height = c.height * scaleFactor;
-      ctx = c.getContext("2d");
-    }
+export default function draw (canvasId, data, left, right, candlestickPeriod, colors, mobile = false) {
+  if (!data) {
+    return false;
   }
-  gutterWidth *= scaleFactor;
-  var width = c.width - (gutterWidth * 2);
-  var height = c.height;
-  var x, vScale, count = 0;
-  var top = 0,
-    bottom = 10000;
-  var close;
-  var marginTop = 10 * scaleFactor;
-  var marginBottom = 10 * scaleFactor;
 
-  // To avoid unnecessary load, skip data points between pixels
-  var iStep = Math.max(Math.floor(data.length/width),1);
-
-  for (var i = 0; i < data.length; i+=iStep) {
-    if (!(data[i] instanceof Object)) {
-      delete data[i];
-      continue;
-    }
-    close = data[i].close;
-    if (close > top) top = close;
-    if (close < bottom) bottom = close;
-  }
-  vScale = (height - (marginTop + marginBottom)) / (top - bottom);
-  shft = Math.floor(bottom * vScale - marginBottom);
-  close = data[0].close;
-  ctx.beginPath();
-  ctx.moveTo(gutterWidth, height - (close * vScale) + shft);
-
-
-  for (var i = 1; i < data.length; i+=iStep) {
-    if (!(data[i] instanceof Object)) {
-      delete data[i];
-      continue;
-    }
-    close = data[i].close;
-    x = (i / data.length) * width;
-    ctx.lineTo(x + gutterWidth, height - (close * vScale) + shft);
-  }
-  ctx.strokeStyle = "#084044";
-
-  ctx.stroke();
-}
-
-export default function candlestick(canvasId, data, left, right, candlestickPeriod,
-                                    bollingerBand, mobile) {
-  if (data === undefined) { return false;}
-  if (mobile === undefined)mobile = false;
   var c = document.getElementById(canvasId);
   var ctx = c.getContext("2d");
   var scaleFactor = window.devicePixelRatio;
@@ -82,13 +34,12 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
       c.style.height = c.height;
       c.width = c.width * scaleFactor;
       c.height = c.height * scaleFactor;
-      var ctx = c.getContext("2d");
+      ctx = c.getContext("2d");
     }
   }
   ctx.clearRect(0, 0, c.width, c.height);
 
-  var alignYaxisRight = true;
-  // console.log('candlestick, data = ', data);
+  var alignYaxisRight = false;
 
   var width = c.width;
   var height = c.height;
@@ -116,25 +67,16 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   paddingBottom += indicatorMargin;
   marginBottom += indicatorMargin;
 
-  var high, low, open, close, volume;
   var chartHigh, chartLow;
   var top = 0,
     bottom = 10000,
     maxVol = 0;
-  var x, y, w, h, vScale, volScale, count = 0;
+  var vScale, volScale;
   var fibLowX, fibHighX;
   //trace(canvasId + ' w = ' + width + ', h = ' + height + ' ; d=' +dark);
 
   // Colors:
-  var borderColor = "#91abac";
-  var wickColor = "#223535";
-  var textColor = "#1e2324";
-  var hLineColor =  "#e9f0f0";
-  var vLineColor = "#e9f0f0";
-  var volumeColor = "#b5c8c9";
-  var greenColor = "#339349";
-  var redColor = "#a42015";
-  var emaColor = "rgb(210,200,130)";
+  let { borderColor, wickColor, textColor, lineColor, volumeColor, greenColor, redColor } = colors;
 
   if (right > 1) right = 1;
   if (left >= right)left = right - 0.001;
@@ -149,22 +91,6 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   var candleSpacing = candleWidth / 2;
   var returnArray = new Array();
   var detectArray = new Array();
-  var month = new Array();
-  var bBand1 = [];
-  var bBand2 = [];
-  var sd;
-  month[0] = "Jan";
-  month[1] = "Feb";
-  month[2] = "Mar";
-  month[3] = "Apr";
-  month[4] = "May";
-  month[5] = "Jun";
-  month[6] = "Jul";
-  month[7] = "Aug";
-  month[8] = "Sep";
-  month[9] = "Oct";
-  month[10] = "Nov";
-  month[11] = "Dec";
   var size = Math.floor(10 * scaleFactor);
   ctx.font = size + "px Arial";
   ctx.clearRect(0, 0, width, height);
@@ -220,84 +146,57 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   }
   var sticksPerTimestamp = Math.round(32*scaleFactor/candleWidth);
   if (sticksPerTimestamp < 1) sticksPerTimestamp = 1;
-  var dateString, timeString;
-  var timestampCount = sticksPerTimestamp;
 
-  // Draw vertical lines and dates
-  drawVerticalLines(ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
-    dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
-    alignYaxisRight);
+  // Draw dates on X-axis:
+  drawXDates(ctx, data, start, end, sticksPerTimestamp, borderColor, marginLeft,
+    candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor);
 
-  if (alignYaxisRight) {
-    // draw rightmost v line
-    ctx.fillStyle = borderColor;
-    ctx.moveTo(0, width);
-    ctx.fillRect(width, 0, 1, height);
-  }
+  // Draw Y-axis:
+  var { lineBottom, paddingBottom } = drawYLabels(ctx, scaleFactor, vScale, step, height, width, top, bottom,
+    marginTop, marginBottom, marginLeft, paddingBottom, textColor, lineColor, decimals);
 
-  count = 0;
-  var lineBottom = bottom - ((marginBottom - paddingBottom) / vScale);
-  if (lineBottom < 0){
-    lineBottom = 0;
-    paddingBottom -= Math.round((bottom - ((marginBottom - paddingBottom) / vScale)) * vScale);
-  }
-  var lineTop = top + (marginTop / vScale);
-  // horiz lines and yaxis text
-  for (var l = lineBottom; l <= lineTop+((lineTop - lineBottom) / step)/2; l += (lineTop - lineBottom) / step) {
-    ctx.fillStyle = hLineColor;
-    x = marginLeft;
-    y = Math.floor(height - (l * vScale));
-    w = width;
-    h = 1;
-    var horizLineW = width;
-    if (alignYaxisRight) { horizLineW = c.width; }
-    ctx.fillRect(x, y + shft, horizLineW, h);
-    ctx.fillStyle = textColor;
-    // move yaxis text into right margin
-    var labelPos = 0;
-    if (alignYaxisRight) { labelPos = w + 5; }
-    var txtYpos = y + shft - 3;
-    if ((l+(lineTop - lineBottom)/step)>lineTop+((lineTop - lineBottom) / step)/2)txtYpos+=10*scaleFactor+(2/scaleFactor);
-    ctx.fillText(l.toFixed(decimals), labelPos, txtYpos);
-    lineRangeTop = l;
-  }
   lineRangeBottom = lineBottom;
 
+  // Draw Volume and Candlesticks:
+  let count = 0;
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
     if (!(data[i] instanceof Object)) {
       delete data[i];
       continue;
     }
-    high = data[i].high;
-    low = data[i].low;
-    open = data[i].open;
-    close = data[i].close;
-    volume = data[i].volume;
+    let high = data[i].high;
+    let low = data[i].low;
+    let open = data[i].open;
+    let close = data[i].close;
+    let volume = data[i].volume;
+    let candlestickColor = close > open ? greenColor : redColor;
+    let x = (count * candleWidth) + (count * candleSpacing) - 1;
+    let w = candleWidth + (candleSpacing / 2);
+    let h = Math.floor(volume * volScale);
+    let y = height - h;
+
     ctx.fillStyle = volumeColor;
-    x = (count * candleWidth) + (count * candleSpacing) - 1;
-    w = candleWidth + (candleSpacing / 2);
-    h = Math.floor(volume * volScale);
-    y = height - h;
     ctx.fillRect(x + marginLeft, y - paddingBottom, w, h);
-    ctx.fillStyle = wickColor;
+
     x = (count * candleWidth) + (count * candleSpacing) + (candleWidth /
       2) - (wickWidth / 2);
     y = height - (high * vScale);
     h = (high - low) * vScale;
     //x=Math.floor(x);
+
+    ctx.fillStyle = wickColor || candlestickColor;
     ctx.fillRect(x + marginLeft, y + shft, wickWidth, h);
+
     if (low == chartLow) fibLowX = x;
     if (high == chartHigh) fibHighX = x;
     if (close > open) {
       y = height - (close * vScale);
       h = (close - open) * vScale;
-      ctx.fillStyle = greenColor;
     }
     if (close < open) {
       y = height - (open * vScale);
       h = (open - close) * vScale;
-      ctx.fillStyle = redColor;
     }
     if (close == open) {
       y = height - (open * vScale);
@@ -307,12 +206,11 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
     if (h < 1) h = 1;
     y = Math.floor(y);
     h = Math.floor(h);
+
+    ctx.fillStyle = candlestickColor;
     ctx.fillRect(x + marginLeft, y + shft, candleWidth, h);
+
     var date = new Date(data[i].date * 1000);
-    timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" + (
-      "0" + date.getUTCMinutes()).slice(-2);
-    dateString = month[date.getUTCMonth()] + " " + date.getUTCDate() +
-      " " + timeString;
     detectArray[count] = {
       'left': (x + marginLeft) / scaleFactor,
       'right': (x + marginLeft + candleWidth + candleSpacing) / scaleFactor,
@@ -323,7 +221,7 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
       'volume': volume,
       'quoteVolume': data[i].quoteVolume,
       'weightedAverage': data[i].weightedAverage,
-      'date': dateString
+      'date': date
     };
     count++;
     // because the canvas is 2x as wide as the div that contains it, for hi-res screens, we have to scale down the detect array elements
@@ -343,9 +241,11 @@ export default function candlestick(canvasId, data, left, right, candlestickPeri
   return returnArray;
 }
 
-function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
-                            dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
-                            alignYaxisRight) {
+function drawXDates (ctx, data, start, end, sticksPerTimestamp, lineColor, marginLeft,
+                     candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor) {
+  let count = 0;
+  let lineCount = 0;
+  let timestampCount = sticksPerTimestamp;
 
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
@@ -354,39 +254,58 @@ function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTime
       continue;
     }
     if (timestampCount == sticksPerTimestamp) {
+      lineCount++;
       timestampCount = 0;
-      var date = new Date(data[i].date * 1000);
-      dateString = month[date.getUTCMonth()] + " " + date.getUTCDate();
-      timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" +
-        ("0" + date.getUTCMinutes()).slice(-2);
-      ctx.fillStyle = vLineColor;
-      x = marginLeft + count * (candleWidth + candleSpacing) + (
-        candleWidth / 2);
-      y = 0;
-      w = 1;
-      h = height;
-      ctx.fillRect(x, y, w, h);
-      ctx.fillStyle = textColor;
+
+      ctx.fillStyle = lineColor;
+      let x = marginLeft + count * (candleWidth + candleSpacing) + (candleWidth / 2);
+      let y = 0;
+      ctx.fillRect(x - 1, y + height - 50, 2, 6);
 
       var dateH =  height - dateMargin;
       var timeH = dateH + 10*scaleFactor;
       x -= 13 * scaleFactor;
 
-      if (alignYaxisRight) {
-        if (count > 0) {
-          ctx.fillText(dateString, x, dateH);
-          ctx.fillText(timeString, x, timeH);
-        }
-      } else {
-        // align y axis left
-
-        ctx.fillText(dateString, x, dateH);
-
-        ctx.fillText(timeString, x, timeH);
+      // show date on every 2nd vertical marks till there are less than 8 marks:
+      if (lineCount % 2 === 1 || end - start < 8) {
+        let momentDate = moment(new Date(data[i].date * 1000));
+        let date = momentDate.format('MMMM D');
+        let time = momentDate.format('hh:mm A');
+        ctx.fillStyle = textColor;
+        ctx.fillText(date, x, dateH);
+        ctx.fillText(time, x, timeH);
       }
-
     }
     timestampCount++;
     count++;
   }
+}
+
+function drawYLabels (ctx, scaleFactor, vScale, step, height, width, top, bottom,
+                      marginTop, marginBottom, marginLeft, paddingBottom, textColor, lineColor, decimals) {
+  var lineBottom = bottom - ((marginBottom - paddingBottom) / vScale);
+  if (lineBottom < 0){
+    lineBottom = 0;
+    paddingBottom -= Math.round((bottom - ((marginBottom - paddingBottom) / vScale)) * vScale);
+  }
+  var lineTop = top + (marginTop / vScale);
+
+  // Horizontal lines and Y-axis labels:
+  for (var l = lineBottom; l <= lineTop+((lineTop - lineBottom) / step)/2; l += (lineTop - lineBottom) / step) {
+    ctx.fillStyle = lineColor;
+    let x = marginLeft;
+    let y = Math.floor(height - (l * vScale));
+    // if (alignYaxisRight) { horizLineW = c.width; }
+    ctx.fillRect(x, y + shft, width, 1);
+    ctx.fillStyle = textColor;
+
+    // move Y-axis text into right margin
+    var labelPos = 0;
+    // if (alignYaxisRight) { labelPos = w + 5; }
+    var txtYpos = y + shft - 3;
+    if ((l+(lineTop - lineBottom)/step)>lineTop+((lineTop - lineBottom) / step)/2)txtYpos+=10*scaleFactor+(2/scaleFactor);
+    ctx.fillText(l.toFixed(decimals), labelPos, txtYpos);
+    lineRangeTop = l;
+  }
+  return { lineBottom, paddingBottom };
 }

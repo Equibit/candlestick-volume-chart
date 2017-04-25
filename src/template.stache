@@ -1,32 +1,42 @@
-<div class="bigChart">
+<can-import from="./chart-info/" />
+
+<div class="chart-container">
   <div class="chart">
-    <div id="chartLoading"><p><i class="fa fa-refresh fa-spin"></i> Loading chart...</p></div>
-    <div id="canvasContainer" width="1008" style="width: 1008px; height: 450px;">
-      <canvas id="chart30Canvas" width="2016" height="900" style="width: 1008px; height: 450px;"></canvas>
-      <div class="chartInfoDiv" id="mainChartInfo" style="display: block;"><table class="mainChartInfoTable"><tbody><tr><td class="description">Open:</td><td>0.01722888</td><td>&nbsp;</td><td class="description">Close:</td><td>0.01872492</td><td>&nbsp;</td><td class="description">High:</td><td>0.01950000</td><td>&nbsp;</td><td class="description">Low:</td><td>0.01715000</td></tr><tr><td class="description">Wtd Avg:</td><td>0.01845686</td><td>&nbsp;</td><td class="description">Vol (BTC):</td><td>43290.</td><td>&nbsp;</td><td class="description">Vol (ETH):</td><td>2345511</td><td>&nbsp;</td><td class="description">Date:</td><td>Jul 20  00:00</td></tr></tbody></table></div>
-      <div id="crosshairHInfo" style="margin-top: -12px; top: 125px; display: block;">
-        <div id="crosshairHInfoTextContainer">0.02265</div>
+    <div class="chart-loading"><p><i class="icon icon-clock"></i>Loading data...</p></div>
+    <div id="canvas-container">
+      <canvas id="chart-canvas"></canvas>
+
+      <chart-info {data}="chartHoverInfo"></chart-info>
+
+      <div class="chart-info-div"></div>
+      <div id="crosshairHInfo">
+        <div id="crosshairHInfoTextContainer"></div>
       </div>
-      <div id="chartCrosshairH" style="top: 125px; display: block;"></div>
-      <div id="chartCrosshairV" style="left: 427.724px; display: block;"></div>
+      <div id="chartCrosshairH"></div>
+      <div id="chartCrosshairV"></div>
+      <div class="chart-axis axis-x"></div>
+      <div class="chart-axis axis-y"></div>
     </div>
 
-    <div id="zoomDiv" width="1008" style="width: 1008px;">
-      <canvas id="previewCanvas" width="2016" height="100" style="width: 1008px;"></canvas>
-      <div id="chartBounds" class="ui-draggable ui-draggable-handle" style="width: 188px; left: 477.375px; right: auto; top: 0px;"></div>
-      <div class="chartBoundsContainer" id="chartBoundsRightContainer" style="padding-left: 485.375px;">
-        <div id="chartBoundsRight" class="ui-draggable ui-draggable-handle" style="left: 657.375px; width: 8px; right: auto; top: -1px;"></div>
+    <div id="preview-container">
+      <canvas id="preview-canvas"></canvas>
+      <div id="chartBounds" class="ui-draggable ui-draggable-handle"></div>
+      <div class="chartBoundsContainer" id="chart-bounds-right-container">
+        <div id="chartBoundsRight" class="zoom-btn ui-draggable ui-draggable-handle">
+          ||<div class="vertical-top"></div><div class="vertical-bottom"></div>
+        </div>
       </div>
-      <div class="chartBoundsContainer" id="chartBoundsLeftContainer" style="padding-right: 350.625px;">
-        <div id="chartBoundsLeft" class="ui-draggable ui-draggable-handle" style="left: 477.375px;"></div>
+      <div class="chartBoundsContainer" id="chart-bounds-left-container">
+        <div id="chartBoundsLeft" class="zoom-btn ui-draggable ui-draggable-handle">
+          ||<div class="vertical-top"></div><div class="vertical-bottom"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="chartButtons">
-    <div class="chartLoadingDiv"></div>
+  <div class="chart-controls">
     <div class="group zoom">
-      <div class="name">Zoom:</div>
+      <div class="label">Zoom:</div>
       <ul class="button-group">
         <li><button class="button {{#is zoom 6}}chartButtonActive{{/is}}" ($click)="zoomTo(6)">6h</button></li>
         <li><button class="button {{#is zoom 24}}chartButtonActive{{/is}}" ($click)="zoomTo(24)">24h</button></li>
@@ -40,7 +50,7 @@
     </div>
 
     <div class="group candlesticks">
-      <div class="name">Candlesticks:</div>
+      <div class="label">Candlesticks:</div>
       <ul class="button-group">
         <li><button class="button {{#is candlestickSize 300}}chartButtonActive{{/is}}" ($click)="sizeTo(300)">5min</button></li>
         <li><button class="button {{#is candlestickSize 900}}chartButtonActive{{/is}}" ($click)="sizeTo(900)">15min</button></li>

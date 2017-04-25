@@ -1,0 +1,9 @@
+.DS_Store
+.idea
+.gitignore
+node_modules
+src
+test
+yarn.lock
+build.js
+npm-debug.log

@@ -1,7 +1,7 @@
 <style>.chart-container .chart { max-width: 600px } body { padding: 20px }</style>
 
 <script type="text/stache" id="demo-html">
-  <can-import from="~/candlestick-volume-chart" />
+  <can-import from="dist/candlestick-volume-chart" />
 
   <candlestick-volume-chart {chart-data}="chartData"
                             {(candlestick-size)}="candlestickSize"
@@ -15,7 +15,7 @@
   import stache from 'can-stache';
   import DefineMap from 'can-define/map/map';
   import 'can-view-import';
-  import '~/candlestick-volume-chart';
+  import 'dist/candlestick-volume-chart';
 
   let template = stache.from('demo-html');
   let VM = DefineMap.extend({
@@ -34,9 +34,7 @@
       }
     },
     loadData (candlestickSize) {
-      console.log(`loadData(${candlestickSize})`);
       $.get(candlestickSize < 1000 ? 'data-1.json' : 'data-2.json').then(chartData => {
-        console.log(`loadedData(${chartData.length})`);
         this.chartData = chartData;
       });
     }
