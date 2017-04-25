@@ -1,6 +1,6 @@
 {
-  "name": "@equibit/candlestick-volume-chart",
-  "version": "0.1.0",
+  "name": "candlestick-volume-chart",
+  "version": "0.1.4",
   "main": "dist/candlestick-volume-chart.js",
   "description": "Candlestick-volume chart",
   "homepage": "",
@@ -24,9 +24,6 @@
     "release:major": "npm version major && npm publish"
   },
   "license": "UNLICENSED",
-  "files": [
-    "src"
-  ],
   "semistandard": {
     "env": [
       "mocha"
