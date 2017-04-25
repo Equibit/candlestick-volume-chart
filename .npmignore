@@ -6,3 +6,4 @@ src
 test
 yarn.lock
 build.js
+npm-debug.log
