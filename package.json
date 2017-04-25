@@ -1,6 +1,6 @@
 {
   "name": "@equibit/candlestick-volume-chart",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "dist/candlestick-volume-chart.js",
   "description": "Candlestick-volume chart",
   "homepage": "",
