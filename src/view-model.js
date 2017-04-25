@@ -47,6 +47,24 @@ export default DefineMap.extend({
 
   zoom: 'number',
 
+  /**
+   * @property {Number} zoomStart
+   * Initial value for the left border of the preview zoom window. From 0 to 1.
+   */
+  zoomStart: {
+    type: 'number',
+    value: 0.9
+  },
+
+  /**
+   * @property {Number} zoomEnd
+   * Initial value for the right border of the preview zoom window. From `zoomStart` to 1.
+   */
+  zoomEnd: {
+    type: 'number',
+    value: 1
+  },
+
   chartHoverInfo: {
     value: new InfoData({
       currencyPrimary: 'EQB',
@@ -62,7 +80,9 @@ export default DefineMap.extend({
     init({
       colors: this.colors,
       height: this.chartHeight,
-      chartHoverInfo: this.chartHoverInfo
+      chartHoverInfo: this.chartHoverInfo,
+      zoomStart: this.zoomStart,
+      zoomEnd: this.zoomEnd
     });
     this.isInitialized = true;
   },

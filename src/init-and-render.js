@@ -7,10 +7,10 @@ let ch = 200;
 let zh = 50;
 let chartHoverInfo;
 
-var chartLeft = 650;
-var chartRight = 1000;
-var chartLeftPercent = 0.90;
-var chartRightPercent = 1.00;
+var chartLeft;
+var chartRight;
+var chartLeftPercent;
+var chartRightPercent;
 
 var chartCanvasWidth = 1000;
 var chartCanvasWidthPrev = chartCanvasWidth;
@@ -106,10 +106,7 @@ function refreshChart() {
   $('#chartCanvas').attr({height: ch * scale, width: cw * scale}).css('height',ch + 'px');
   $('#previewCanvas').attr({height: zh * scale, width: cw * scale});
 
-  var leftPercent = chartLeftPercent;
-  var rightPercent = chartRightPercent
-
-  changeCandlestickZoom(leftPercent, rightPercent);
+  changeCandlestickZoom(chartLeftPercent, chartRightPercent);
 
   // The bottom Zoom control (preview of all data):
   preview('previewCanvas', chartData, handleWidth, colors);
@@ -415,6 +412,9 @@ export function init (options) {
   colors = options.colors;
   ch = options.height;
   chartHoverInfo = options.chartHoverInfo;
+  chartLeftPercent = options.zoomStart;
+  chartRightPercent = options.zoomEnd;
+
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   chartCanvasWidthPrev = chartCanvasWidth;
