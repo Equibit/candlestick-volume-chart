@@ -1,16 +1,16 @@
 <can-import from="./chart-info/" />
 
-<div class="bigChart">
+<div class="chart-container">
   <div class="chart">
-    <div id="chartLoading"><p><i class="icon icon-clock"></i>Loading data...</p></div>
-    <div id="canvasContainer">
-      <canvas id="chartCanvas"></canvas>
+    <div class="chart-loading"><p><i class="icon icon-clock"></i>Loading data...</p></div>
+    <div id="canvas-container">
+      <canvas id="chart-canvas"></canvas>
 
       <chart-info {data}="chartHoverInfo"></chart-info>
 
-      <div class="chartInfoDiv" id="mainChartInfo"></div>
+      <div class="chart-info-div"></div>
       <div id="crosshairHInfo">
-        <div id="crosshairHInfoTextContainer">0.02265</div>
+        <div id="crosshairHInfoTextContainer"></div>
       </div>
       <div id="chartCrosshairH"></div>
       <div id="chartCrosshairV"></div>
@@ -19,14 +19,14 @@
     </div>
 
     <div id="preview-container">
-      <canvas id="previewCanvas"></canvas>
+      <canvas id="preview-canvas"></canvas>
       <div id="chartBounds" class="ui-draggable ui-draggable-handle"></div>
-      <div class="chartBoundsContainer" id="chartBoundsRightContainer">
+      <div class="chartBoundsContainer" id="chart-bounds-right-container">
         <div id="chartBoundsRight" class="zoom-btn ui-draggable ui-draggable-handle">
           ||<div class="vertical-top"></div><div class="vertical-bottom"></div>
         </div>
       </div>
-      <div class="chartBoundsContainer" id="chartBoundsLeftContainer">
+      <div class="chartBoundsContainer" id="chart-bounds-left-container">
         <div id="chartBoundsLeft" class="zoom-btn ui-draggable ui-draggable-handle">
           ||<div class="vertical-top"></div><div class="vertical-bottom"></div>
         </div>
@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <div class="chartButtons">
+  <div class="chart-controls">
     <div class="group zoom">
       <div class="label">Zoom:</div>
       <ul class="button-group">

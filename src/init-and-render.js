@@ -28,8 +28,8 @@ var mainChartHeight, chartDecimals, indicatorHeight, macdRange;
 var crosshairH;
 
 function hideChartLoading() {
-  $('#chartCanvas').show();
-  $('.bigChart').addClass("ready");
+  $('#chart-canvas').show();
+  $('.chart-container').addClass("ready");
 }
 
 function updateChartHighLow(high,low){
@@ -59,7 +59,7 @@ export function chartSnapZoom(hours) {
     'width': (right - left) + handleWidth
   });
 
-  returnArray = draw('chartCanvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
+  returnArray = draw('chart-canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
 
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
@@ -74,7 +74,7 @@ export function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  returnArray = draw('chartCanvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
+  returnArray = draw('chart-canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;
@@ -88,7 +88,7 @@ function changeCandlestickZoom(leftPercent, rightPercent) {
 }
 
 function getChartWidth(){
-  var cw = $('.bigChart .chart').css('width');
+  var cw = $('.chart-container .chart').css('width');
   cw = Number(cw.substr(0, cw.length-2)-2); // -2 to account for 1px border
   return cw;
 }
@@ -96,20 +96,20 @@ function getChartWidth(){
 function refreshChart() {
   var cw = getChartWidth();
 
-  $('#preview-container, #previewCanvas, #chartCanvas, #canvasContainer')
+  $('#preview-container, #preview-canvas, #chart-canvas, #canvas-container')
     .attr({width: cw})
     .css({width: cw});
 
   var scale = window.devicePixelRatio;
 
-  $('#canvasContainer').css('height',ch + 'px');
-  $('#chartCanvas').attr({height: ch * scale, width: cw * scale}).css('height',ch + 'px');
-  $('#previewCanvas').attr({height: zh * scale, width: cw * scale});
+  $('#canvas-container').css('height',ch + 'px');
+  $('#chart-canvas').attr({height: ch * scale, width: cw * scale}).css('height',ch + 'px');
+  $('#preview-canvas').attr({height: zh * scale, width: cw * scale});
 
   changeCandlestickZoom(chartLeftPercent, chartRightPercent);
 
   // The bottom Zoom control (preview of all data):
-  preview('previewCanvas', chartData, handleWidth, colors);
+  preview('preview-canvas', chartData, handleWidth, colors);
 }
 
 function changecandlestickPeriod(candlestickPeriod) {
@@ -160,8 +160,8 @@ export function initPreview() {
   var left = cbl.position().left + handleWidth;
   var right = cbr.position().left;
 
-  $("#chartBoundsLeftContainer").css('padding-right', (chartCanvasWidth - right) + "px");
-  $("#chartBoundsRightContainer").css('padding-left', (left) + "px");
+  $("#chart-bounds-left-container").css('padding-right', (chartCanvasWidth - right) + "px");
+  $("#chart-bounds-right-container").css('padding-left', (left) + "px");
   $("#chartBoundsRight").draggable({
     drag: function(event, ui) {
       var left = $('#chartBoundsLeft').position().left + handleWidth * 2;
@@ -198,7 +198,7 @@ export function initPreview() {
         'left': left - handleWidth,
         'width': (right - left) + handleWidth*2
       });
-      $("#chartBoundsLeftContainer").css(
+      $("#chart-bounds-left-container").css(
         'padding-right', (chartCanvasWidth -
         right) + "px");
 
@@ -247,7 +247,7 @@ export function initPreview() {
         'left': left - handleWidth,
         'width': (right - left) + handleWidth*2
       });
-      $("#chartBoundsRightContainer").css(
+      $("#chart-bounds-right-container").css(
         'padding-left', (left) +
         "px");
 
@@ -293,9 +293,9 @@ export function initPreview() {
       $('#chartBoundsRight').css({
         'left': right,
       });
-      $("#chartBoundsLeftContainer").css(
+      $("#chart-bounds-left-container").css(
         'padding-right', (cw - right) + "px");
-      $("#chartBoundsRightContainer").css(
+      $("#chart-bounds-right-container").css(
         'padding-left', (left) +
         "px");
       chartLeftPercent = (left - handleWidth)/(cw - handleWidth*2);
@@ -306,7 +306,7 @@ export function initPreview() {
 }
 
 function updateChartCanvasWidth() {
-  chartCanvasWidth = $('#canvasContainer').width();
+  chartCanvasWidth = $('#canvas-container').width();
 }
 
 export function resizeCharts() {
@@ -329,11 +329,11 @@ export function resizeCharts() {
 
 function initChartMouseover() {
   // Main Chart
-  $('#canvasContainer').on('mousemove', function (e) {
+  $('#canvas-container').on('mousemove', function (e) {
     if (!detectArray){
       return;
     }
-    var posX = e.pageX - this.offsetLeft - $("#canvasContainer").offset().left;
+    var posX = e.pageX - this.offsetLeft - $("#canvas-container").offset().left;
     for (var c = 0; c < detectArray.length; c++) {
       var info = detectArray[c];
       var gap = info.right - info.left;
@@ -365,7 +365,7 @@ function initChartMouseover() {
       crosshairH = detectArray[detectArray.length-1].left + (gap/3) - 0.5;
 
     var l = e.pageX - 160;
-    var crosshairV = e.pageY - $("#canvasContainer").offset().top - 3;
+    var crosshairV = e.pageY - $("#canvas-container").offset().top - 3;
     var linePosText;
 
     if (crosshairV<=mainChartHeight){
@@ -392,7 +392,7 @@ function initChartMouseover() {
     }
 
   });
-  $('#canvasContainer').mouseout(function() {
+  $('#canvas-container').mouseout(function() {
     chartHoverInfo.isVisible = false;
     $('#indicatorInfo').css('display', 'none');
     $('#crosshairHInfo').css('display', 'none');
