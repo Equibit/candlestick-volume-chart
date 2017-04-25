@@ -1,5 +1,5 @@
 {
-  "name": "candlestick-volume-chart",
+  "name": "@equibit/candlestick-volume-chart",
   "version": "0.0.1",
   "main": "dist/candlestick-volume-chart.min.js",
   "description": "Candlestick-volume chart",
@@ -14,7 +14,6 @@
     "url": "https://equibit.org"
   },
   "license": "UNLICENSED",
-  "private": true,
   "files": [
     "src"
   ],
@@ -51,17 +50,6 @@
       "chai",
       "steal-less",
       "steal-stache"
-    ],
-    "meta": {
-      "jquery": {
-        "format": "global",
-        "exports": "$"
-      },
-      "jquery-ui/ui/widgets/draggable": {
-        "deps": [
-          "jquery"
-        ]
-      }
-    }
+    ]
   }
 }

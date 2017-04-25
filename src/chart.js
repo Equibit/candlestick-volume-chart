@@ -1,10 +1,10 @@
-// import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui/ui/widgets/draggable';
 import candlestick, { preview } from './candlestick';
 
 let colors;
-
-var primaryCurrency = 'BTC';
-var secondaryCurrency = 'LTC';
+let ch = 200;
+let zh = 50;
+let chartHoverInfo;
 
 var chartLeft = 650;
 var chartRight = 1000;
@@ -15,14 +15,9 @@ var chartCanvasWidth = 1000;
 var chartCanvasWidthPrev = chartCanvasWidth;
 var handleWidth;
 
-var ch = 200;
-var zh = 50;
-var chartHoverInfo;
-
 var returnArray = [];
 var detectArray = [];
 var chartData, range;
-var bollingerBand=false;
 var dataByPeriod = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
 var candlestickPeriod = 1800;
 var chartsJsLoaded = false;
@@ -122,7 +117,6 @@ function refreshChart() {
 function changecandlestickPeriod(candlestickPeriod) {
   var left = $('#chartBoundsLeft').position().left + handleWidth;
   var right = $('#chartBoundsRight').position().left;
-  window.candlestickPeriod = candlestickPeriod;
 
   if ('candleStick' in dataByPeriod[candlestickPeriod]){
     refreshCandleSticks();

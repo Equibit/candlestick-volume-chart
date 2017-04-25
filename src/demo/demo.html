@@ -8,12 +8,10 @@
                             {chart-height}="chartHeight" />
 </script>
 
-<script src="../../node_modules/jquery/dist/jquery.js"></script>
-<script src="./lib/jquery-ui.min.js"></script>
 <script src="../../node_modules/steal/steal.js"
         main="@empty">
   import canViewModel from 'can-view-model';
-  // import $ from 'jquery';
+  import $ from 'jquery';
   import stache from 'can-stache';
   import DefineMap from 'can-define/map/map';
   import 'can-view-import';
@@ -25,7 +23,7 @@
       type: '*'
     },
     chartHeight: {
-      value: 200
+      value: 250
     },
     candlestickSize: {
       set (val) {

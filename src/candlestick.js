@@ -1,14 +1,9 @@
+import moment from 'moment';
+
 var numberOfCandles;
 var shft;
 var lineRangeTop;
 var lineRangeBottom;
-
-function backingScale() {
-  if ('devicePixelRatio' in window && window.devicePixelRatio > 1)
-    return window.devicePixelRatio;
-
-  return 1;
-}
 
 export function preview(canvasId, data, gutterWidth, colors) {
   if (data === undefined) { return false; }
@@ -27,7 +22,7 @@ export function preview(canvasId, data, gutterWidth, colors) {
   gutterWidth *= scaleFactor;
   var width = c.width - (gutterWidth * 2);
   var height = c.height;
-  var x, vScale, count = 0;
+  var x, vScale;
   var top = 0,
     bottom = 10000;
   var close;
@@ -121,7 +116,7 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   var top = 0,
     bottom = 10000,
     maxVol = 0;
-  var x, y, w, h, vScale, volScale, count = 0;
+  var x, y, w, h, vScale, volScale;
   var fibLowX, fibHighX;
   //trace(canvasId + ' w = ' + width + ', h = ' + height + ' ; d=' +dark);
 
@@ -141,19 +136,6 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   var candleSpacing = candleWidth / 2;
   var returnArray = new Array();
   var detectArray = new Array();
-  var month = new Array();
-  month[0] = "Jan";
-  month[1] = "Feb";
-  month[2] = "Mar";
-  month[3] = "Apr";
-  month[4] = "May";
-  month[5] = "Jun";
-  month[6] = "Jul";
-  month[7] = "Aug";
-  month[8] = "Sep";
-  month[9] = "Oct";
-  month[10] = "Nov";
-  month[11] = "Dec";
   var size = Math.floor(10 * scaleFactor);
   ctx.font = size + "px Arial";
   ctx.clearRect(0, 0, width, height);
@@ -209,22 +191,11 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   }
   var sticksPerTimestamp = Math.round(32*scaleFactor/candleWidth);
   if (sticksPerTimestamp < 1) sticksPerTimestamp = 1;
-  var dateString, timeString;
-  var timestampCount = sticksPerTimestamp;
 
-  // Draw vertical lines and dates
-  drawVerticalLines(ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
-    dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
-    alignYaxisRight);
+  // Draw dates on X-axis:
+  drawXDates(ctx, data, start, end, sticksPerTimestamp, borderColor, marginLeft,
+    candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor);
 
-  if (alignYaxisRight) {
-    // draw rightmost v line
-    ctx.fillStyle = borderColor;
-    ctx.moveTo(0, width);
-    ctx.fillRect(width, 0, 1, height);
-  }
-
-  count = 0;
   var lineBottom = bottom - ((marginBottom - paddingBottom) / vScale);
   if (lineBottom < 0){
     lineBottom = 0;
@@ -254,6 +225,7 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   }
   lineRangeBottom = lineBottom;
 
+  let count = 0;
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
     if (!(data[i] instanceof Object)) {
@@ -332,11 +304,12 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   return returnArray;
 }
 
-function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTimestamp, month, vLineColor, marginLeft, count,
-                            dateString, timeString, x, y, w, h, candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor,
-                            alignYaxisRight) {
-
+function drawXDates (ctx, data, start, end, sticksPerTimestamp, lineColor, marginLeft,
+                            candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor) {
+  let count = 0;
   let lineCount = 0;
+  let timestampCount = sticksPerTimestamp;
+
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
     if (!(data[i] instanceof Object)) {
@@ -346,38 +319,25 @@ function drawVerticalLines (ctx, data, start, end, timestampCount, sticksPerTime
     if (timestampCount == sticksPerTimestamp) {
       lineCount++;
       timestampCount = 0;
-      var date = new Date(data[i].date * 1000);
-      dateString = month[date.getUTCMonth()] + " " + date.getUTCDate();
-      timeString = " " + ("0" + date.getUTCHours()).slice(-2) + ":" +
-        ("0" + date.getUTCMinutes()).slice(-2);
-      ctx.fillStyle = vLineColor;
-      x = marginLeft + count * (candleWidth + candleSpacing) + (
-        candleWidth / 2);
-      y = 0;
-      w = 1;
-      h = height;
-      ctx.fillRect(x, y, w, h);
-      ctx.fillStyle = textColor;
+
+      ctx.fillStyle = lineColor;
+      let x = marginLeft + count * (candleWidth + candleSpacing) + (candleWidth / 2);
+      let y = 0;
+      ctx.fillRect(x - 1, y + height - 50, 2, 6);
 
       var dateH =  height - dateMargin;
       var timeH = dateH + 10*scaleFactor;
       x -= 13 * scaleFactor;
 
-      if (alignYaxisRight) {
-        // show date on every 2nd vertical line till there are less than 8 lines:
-        if (lineCount % 2 === 0 || end - start < 8) {
-          console.log(' - date ' + count);
-          ctx.fillText(dateString, x, dateH);
-          ctx.fillText(timeString, x, timeH);
-        }
-      } else {
-        // align y axis left
-
-        ctx.fillText(dateString, x, dateH);
-
-        ctx.fillText(timeString, x, timeH);
+      // show date on every 2nd vertical marks till there are less than 8 marks:
+      if (lineCount % 2 === 1 || end - start < 8) {
+        let momentDate = moment(new Date(data[i].date * 1000));
+        let date = momentDate.format('MMMM D');
+        let time = momentDate.format('hh:mm A');
+        ctx.fillStyle = textColor;
+        ctx.fillText(date, x, dateH);
+        ctx.fillText(time, x, timeH);
       }
-
     }
     timestampCount++;
     count++;

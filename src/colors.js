@@ -1,6 +1,6 @@
 // wickColor: '#333333', // if not defined then candlestick color will be used.
 export default {
-  borderColor: '#999999',
+  borderColor: '#d3d3d3',
   textColor: '#333333',
   hLineColor : '#F2F2F2',
   vLineColor: '#F2F2F2',
