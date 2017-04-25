@@ -1,5 +1,3 @@
-<can-import from="~/chart-info/style.less" />
-
 <table class="{{^if data.isVisible}}hidden{{/if}}">
   <tbody>
     <tr>
