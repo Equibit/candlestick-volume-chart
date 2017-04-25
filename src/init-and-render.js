@@ -6,23 +6,19 @@ let colors;
 let ch = 200;
 let zh = 50;
 let chartHoverInfo;
+let chartLeftPercent;
+let chartRightPercent;
 
-var chartLeft;
-var chartRight;
-var chartLeftPercent;
-var chartRightPercent;
-
-var chartCanvasWidth = 1000;
-var chartCanvasWidthPrev = chartCanvasWidth;
+var chartCanvasWidth;
 var handleWidth;
 
 var returnArray = [];
 var detectArray = [];
 var chartData, range;
-var dataByPeriod = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
+// var dataByPeriod = {'300': {},'900': {},'1800': {},'7200': {},'14400': {},'86400': {}};
 var candlestickPeriod = 1800;
 var chartsJsLoaded = false;
-var chartRangeTop,chartRangeBottom;
+var chartRangeTop, chartRangeBottom;
 var mainChartHeight, chartDecimals, indicatorHeight, macdRange;
 
 var crosshairH;
@@ -112,36 +108,36 @@ function refreshChart() {
   preview('preview-canvas', chartData, handleWidth, colors);
 }
 
-function changecandlestickPeriod(candlestickPeriod) {
-  var left = $('#chartBoundsLeft').position().left + handleWidth;
-  var right = $('#chartBoundsRight').position().left;
+// function changecandlestickPeriod(candlestickPeriod) {
+//   var left = $('#chartBoundsLeft').position().left + handleWidth;
+//   var right = $('#chartBoundsRight').position().left;
+//
+//   if ('candleStick' in dataByPeriod[candlestickPeriod]){
+//     refreshCandleSticks();
+//   } else {
+//     refreshCandleSticksFirst();
+//   }
+// }
 
-  if ('candleStick' in dataByPeriod[candlestickPeriod]){
-    refreshCandleSticks();
-  } else {
-    refreshCandleSticksFirst();
-  }
-}
+// function setCurrentCandlestickButton() {
+//   $('.candlesticks .button.chartButtonActive').removeClass('chartButtonActive');
+//   $('.candlesticks .button#chartButton' + candlestickPeriod).addClass('chartButtonActive');
+// }
 
-function setCurrentCandlestickButton() {
-  $('.candlesticks .button.chartButtonActive').removeClass('chartButtonActive');
-  $('.candlesticks .button#chartButton' + candlestickPeriod).addClass('chartButtonActive');
-}
-
-function refreshCandleSticksFirst(candlestickData) {
-
-  // Load data for the selected candleStick period:
-  dataByPeriod[candlestickPeriod].data = candlestickData;
-
-  var data = dataByPeriod[candlestickPeriod].data;
-  range = data[data.length-1].date - data[0].date;
-  dataByPeriod[candlestickPeriod].range = range;
-
-  chartData = data;
-  setCurrentCandlestickButton();
-  refreshChart();
-  hideChartLoading();
-}
+// function refreshCandleSticksFirst(candlestickData) {
+//
+//   // Load data for the selected candleStick period:
+//   dataByPeriod[candlestickPeriod].data = candlestickData;
+//
+//   var data = dataByPeriod[candlestickPeriod].data;
+//   range = data[data.length-1].date - data[0].date;
+//   dataByPeriod[candlestickPeriod].range = range;
+//
+//   chartData = data;
+//   setCurrentCandlestickButton();
+//   refreshChart();
+//   hideChartLoading();
+// }
 
 function deactivateCurrentZoomButton() {
   $('.zoom .chartButtonActive').blur();
@@ -314,8 +310,8 @@ export function resizeCharts() {
 
   var cw = getChartWidth();
 
-  chartLeft = chartLeftPercent * (cw - handleWidth * 2);
-  chartRight = chartRightPercent * (cw - handleWidth * 2);
+  let chartLeft = chartLeftPercent * (cw - handleWidth * 2);
+  let chartRight = chartRightPercent * (cw - handleWidth * 2);
 
   $('#chartBoundsRight').css({left: chartRight + handleWidth});
   $('#chartBoundsLeft').css({left: chartLeft - handleWidth});
@@ -323,8 +319,6 @@ export function resizeCharts() {
 
   initPreview();
   refreshChart();
-
-  chartCanvasWidthPrev = chartCanvasWidth;
 }
 
 function initChartMouseover() {
@@ -408,7 +402,6 @@ function initChartMouseover() {
  * @param options
  */
 export function init (options) {
-  console.log('Chart:init()');
   colors = options.colors;
   ch = options.height;
   chartHoverInfo = options.chartHoverInfo;
@@ -417,14 +410,12 @@ export function init (options) {
 
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
-  chartCanvasWidthPrev = chartCanvasWidth;
   initChartMouseover();
 
   $(window).resize(function(){resizeCharts();});
 }
 
 export default function render (data) {
-  console.log('Chart:render()');
   chartData = data;
   range = data[data.length-1].date - data[0].date;
   hideChartLoading();

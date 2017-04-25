@@ -1,7 +1,15 @@
-var stealTools = require("steal-tools");
+var stealTools = require('steal-tools');
 
-var buildPromise = stealTools.build({
-  config: __dirname + "/package.json!npm"
-}, {
-  bundleAssets: true
+stealTools.export({
+  steal: {
+    config: 'package.json!npm',
+    main: '@equibit/candlestick-volume-chart/candlestick-volume-chart'
+  },
+  outputs: {
+    '+cjs': {
+      dest: __dirname + '/dist',
+      sourceMaps: false,
+      minify: true
+    }
+  }
 });
