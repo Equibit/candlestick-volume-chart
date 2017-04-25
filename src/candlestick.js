@@ -111,17 +111,16 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   paddingBottom += indicatorMargin;
   marginBottom += indicatorMargin;
 
-  var high, low, open, close, volume;
   var chartHigh, chartLow;
   var top = 0,
     bottom = 10000,
     maxVol = 0;
-  var x, y, w, h, vScale, volScale;
+  var vScale, volScale;
   var fibLowX, fibHighX;
   //trace(canvasId + ' w = ' + width + ', h = ' + height + ' ; d=' +dark);
 
   // Colors:
-  let { borderColor, wickColor, textColor, hLineColor, vLineColor, volumeColor, greenColor, redColor } = colors;
+  let { borderColor, wickColor, textColor, lineColor, volumeColor, greenColor, redColor } = colors;
 
   if (right > 1) right = 1;
   if (left >= right)left = right - 0.001;
@@ -196,35 +195,13 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
   drawXDates(ctx, data, start, end, sticksPerTimestamp, borderColor, marginLeft,
     candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor);
 
-  var lineBottom = bottom - ((marginBottom - paddingBottom) / vScale);
-  if (lineBottom < 0){
-    lineBottom = 0;
-    paddingBottom -= Math.round((bottom - ((marginBottom - paddingBottom) / vScale)) * vScale);
-  }
-  var lineTop = top + (marginTop / vScale);
+  // Draw Y-axis:
+  var { lineBottom, paddingBottom } = drawYLabels(ctx, scaleFactor, vScale, step, height, width, top, bottom,
+    marginTop, marginBottom, marginLeft, paddingBottom, textColor, lineColor, decimals);
 
-  // Horizontal lines and Y-axis labels:
-  for (var l = lineBottom; l <= lineTop+((lineTop - lineBottom) / step)/2; l += (lineTop - lineBottom) / step) {
-    ctx.fillStyle = hLineColor;
-    x = marginLeft;
-    y = Math.floor(height - (l * vScale));
-    w = width;
-    h = 1;
-    var horizLineW = width;
-    if (alignYaxisRight) { horizLineW = c.width; }
-    ctx.fillRect(x, y + shft, horizLineW, h);
-    ctx.fillStyle = textColor;
-
-    // move Y-axis text into right margin
-    var labelPos = 0;
-    if (alignYaxisRight) { labelPos = w + 5; }
-    var txtYpos = y + shft - 3;
-    if ((l+(lineTop - lineBottom)/step)>lineTop+((lineTop - lineBottom) / step)/2)txtYpos+=10*scaleFactor+(2/scaleFactor);
-    ctx.fillText(l.toFixed(decimals), labelPos, txtYpos);
-    lineRangeTop = l;
-  }
   lineRangeBottom = lineBottom;
 
+  // Draw Volume and Candlesticks:
   let count = 0;
   for (var i = start; i < end; i++) {
     if (i < 0) continue;
@@ -232,36 +209,38 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
       delete data[i];
       continue;
     }
-    high = data[i].high;
-    low = data[i].low;
-    open = data[i].open;
-    close = data[i].close;
-    volume = data[i].volume;
-    ctx.fillStyle = volumeColor;
+    let high = data[i].high;
+    let low = data[i].low;
+    let open = data[i].open;
+    let close = data[i].close;
+    let volume = data[i].volume;
     let candlestickColor = close > open ? greenColor : redColor;
-    x = (count * candleWidth) + (count * candleSpacing) - 1;
-    w = candleWidth + (candleSpacing / 2);
-    h = Math.floor(volume * volScale);
-    y = height - h;
+    let x = (count * candleWidth) + (count * candleSpacing) - 1;
+    let w = candleWidth + (candleSpacing / 2);
+    let h = Math.floor(volume * volScale);
+    let y = height - h;
+
+    ctx.fillStyle = volumeColor;
     ctx.fillRect(x + marginLeft, y - paddingBottom, w, h);
-    ctx.fillStyle = wickColor || candlestickColor;
+
     x = (count * candleWidth) + (count * candleSpacing) + (candleWidth /
       2) - (wickWidth / 2);
     y = height - (high * vScale);
     h = (high - low) * vScale;
     //x=Math.floor(x);
+
+    ctx.fillStyle = wickColor || candlestickColor;
     ctx.fillRect(x + marginLeft, y + shft, wickWidth, h);
+
     if (low == chartLow) fibLowX = x;
     if (high == chartHigh) fibHighX = x;
     if (close > open) {
       y = height - (close * vScale);
       h = (close - open) * vScale;
-      ctx.fillStyle = candlestickColor;
     }
     if (close < open) {
       y = height - (open * vScale);
       h = (open - close) * vScale;
-      ctx.fillStyle = candlestickColor;
     }
     if (close == open) {
       y = height - (open * vScale);
@@ -271,6 +250,8 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
     if (h < 1) h = 1;
     y = Math.floor(y);
     h = Math.floor(h);
+
+    ctx.fillStyle = candlestickColor;
     ctx.fillRect(x + marginLeft, y + shft, candleWidth, h);
 
     var date = new Date(data[i].date * 1000);
@@ -305,7 +286,7 @@ export default function candlestick (canvasId, data, left, right, candlestickPer
 }
 
 function drawXDates (ctx, data, start, end, sticksPerTimestamp, lineColor, marginLeft,
-                            candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor) {
+                     candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor) {
   let count = 0;
   let lineCount = 0;
   let timestampCount = sticksPerTimestamp;
@@ -342,4 +323,33 @@ function drawXDates (ctx, data, start, end, sticksPerTimestamp, lineColor, margi
     timestampCount++;
     count++;
   }
+}
+
+function drawYLabels (ctx, scaleFactor, vScale, step, height, width, top, bottom,
+                      marginTop, marginBottom, marginLeft, paddingBottom, textColor, lineColor, decimals) {
+  var lineBottom = bottom - ((marginBottom - paddingBottom) / vScale);
+  if (lineBottom < 0){
+    lineBottom = 0;
+    paddingBottom -= Math.round((bottom - ((marginBottom - paddingBottom) / vScale)) * vScale);
+  }
+  var lineTop = top + (marginTop / vScale);
+
+  // Horizontal lines and Y-axis labels:
+  for (var l = lineBottom; l <= lineTop+((lineTop - lineBottom) / step)/2; l += (lineTop - lineBottom) / step) {
+    ctx.fillStyle = lineColor;
+    let x = marginLeft;
+    let y = Math.floor(height - (l * vScale));
+    // if (alignYaxisRight) { horizLineW = c.width; }
+    ctx.fillRect(x, y + shft, width, 1);
+    ctx.fillStyle = textColor;
+
+    // move Y-axis text into right margin
+    var labelPos = 0;
+    // if (alignYaxisRight) { labelPos = w + 5; }
+    var txtYpos = y + shft - 3;
+    if ((l+(lineTop - lineBottom)/step)>lineTop+((lineTop - lineBottom) / step)/2)txtYpos+=10*scaleFactor+(2/scaleFactor);
+    ctx.fillText(l.toFixed(decimals), labelPos, txtYpos);
+    lineRangeTop = l;
+  }
+  return { lineBottom, paddingBottom };
 }
