@@ -3,7 +3,7 @@ var stealTools = require('steal-tools');
 stealTools.export({
   steal: {
     config: 'package.json!npm',
-    main: '@equibit/candlestick-volume-chart/candlestick-volume-chart'
+    main: 'candlestick-volume-chart/candlestick-volume-chart'
   },
   outputs: {
     '+cjs': {
