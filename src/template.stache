@@ -4,7 +4,7 @@
   <div class="chart">
     <div id="chartLoading"><p><i class="icon icon-clock"></i>Loading data...</p></div>
     <div id="canvasContainer">
-      <canvas id="chart30Canvas"></canvas>
+      <canvas id="chartCanvas"></canvas>
 
       <chart-info {data}="chartHoverInfo"></chart-info>
 

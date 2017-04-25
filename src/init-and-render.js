@@ -1,5 +1,6 @@
 import 'jquery-ui/ui/widgets/draggable';
-import candlestick, { preview } from './candlestick';
+import draw from './draw';
+import preview from './preview';
 
 let colors;
 let ch = 200;
@@ -27,7 +28,7 @@ var mainChartHeight, chartDecimals, indicatorHeight, macdRange;
 var crosshairH;
 
 function hideChartLoading() {
-  $('#chart30Canvas').show();
+  $('#chartCanvas').show();
   $('.bigChart').addClass("ready");
 }
 
@@ -58,7 +59,7 @@ export function chartSnapZoom(hours) {
     'width': (right - left) + handleWidth
   });
 
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
+  returnArray = draw('chartCanvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
 
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
@@ -73,7 +74,7 @@ export function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  returnArray = candlestick('chart30Canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
+  returnArray = draw('chartCanvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;
@@ -95,14 +96,14 @@ function getChartWidth(){
 function refreshChart() {
   var cw = getChartWidth();
 
-  $('#preview-container, #previewCanvas, #chart30Canvas, #canvasContainer')
+  $('#preview-container, #previewCanvas, #chartCanvas, #canvasContainer')
     .attr({width: cw})
     .css({width: cw});
 
   var scale = window.devicePixelRatio;
 
   $('#canvasContainer').css('height',ch + 'px');
-  $('#chart30Canvas').attr({height: ch * scale, width: cw * scale}).css('height',ch + 'px');
+  $('#chartCanvas').attr({height: ch * scale, width: cw * scale}).css('height',ch + 'px');
   $('#previewCanvas').attr({height: zh * scale, width: cw * scale});
 
   var leftPercent = chartLeftPercent;
@@ -403,6 +404,12 @@ function initChartMouseover() {
   });
 }
 
+/**
+ * @function init
+ * Initialize chart: canvas, control listeners, etc.
+ *
+ * @param options
+ */
 export function init (options) {
   console.log('Chart:init()');
   colors = options.colors;

@@ -1,5 +1,5 @@
 import DefineMap from 'can-define/map/map';
-import render, { init, chartSnapZoom } from './chart';
+import render, { init, chartSnapZoom } from './init-and-render';
 import colors from './colors';
 import { InfoData } from './chart-info/view-model';
 
