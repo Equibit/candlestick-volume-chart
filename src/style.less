@@ -9,6 +9,9 @@
     width: 100%;
     margin-bottom: 20px;
     box-sizing: border-box;
+    .chart-canvas-container {
+      height: 250px;
+    }
     .sprocket {
       position: absolute;
       z-index: 3;
@@ -126,15 +129,6 @@
     line-height: 14px;
     position: relative;
 
-    .chart-loading {
-      width: 100%;
-      height: 32px;
-      position: absolute;
-      background-color: #ffffff;
-      opacity: 0.75;
-      display: block;
-    }
-
     .group {
       float: left;
       margin-right: 15px;
@@ -148,6 +142,21 @@
           display: inline;
         }
       }
+    }
+  }
+
+
+  .chart-loading {
+    width: 100%;
+    height: 32px;
+    position: absolute;
+    top: 60px;
+    text-align: center;
+  }
+
+  &.ready {
+    .chart-loading {
+      display: none;
     }
   }
 }
@@ -184,9 +193,10 @@
     position: absolute;
     top: 0;
     height: 50px;
-    width: 500px;
+    width: 100%;
     background: @preview-bg;
-    opacity: 0.15; }
+    opacity: 0.15;
+  }
   .chartBoundsContainer {
     position: absolute;
     top: 0;
@@ -196,13 +206,6 @@
     width: 1000px;
     height: 50px; }
 }
-
-.chart-container.ready {
-  .chart-loading {
-    display: none;
-  }
-}
-
 
 #chartCrosshairV {
   width: 1px;
@@ -251,39 +254,47 @@
   color: #342201;
 }
 
-.chartBoundsContainer .zoom-btn {
-  position: absolute;
-  top: 11px!important;
-  cursor: ew-resize;
-  height: 24px;
-  line-height: 25px;
-  font-size: 11px;
-  padding: 1px;
-  border-radius: 16px;
-  color: #468CD9;
-  border: 1px solid gray;
-  border-radius: 16px;
-  background-color: #fff;
-  text-align: center;
-  display: inline-block;
-  font-weight: normal;
-  touch-action: manipulation;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-
-  .vertical-top, .vertical-bottom {
+.chartBoundsContainer {
+  .zoom-btn {
     position: absolute;
-    left: 3px;
-    height: 12px;
-    border-left: 1px solid @preview-zoom-border;
+    top: 11px!important;
+    cursor: ew-resize;
+    height: 24px;
+    line-height: 25px;
+    font-size: 11px;
+    padding: 1px;
+    border-radius: 16px;
+    color: #468CD9;
+    border: 1px solid gray;
+    border-radius: 16px;
+    background-color: #fff;
+    text-align: center;
+    display: inline-block;
+    font-weight: normal;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    .vertical-top, .vertical-bottom {
+      position: absolute;
+      left: 3px;
+      height: 12px;
+      border-left: 1px solid @preview-zoom-border;
+    }
+    .vertical-top {
+      top: -12px;
+    }
+    .vertical-bottom {
+      bottom: -12px;
+    }
   }
-  .vertical-top {
-    top: -12px;
-  }
-  .vertical-bottom {
-    bottom: -12px;
+
+  &#chart-bounds-right-container {
+    .zoom-btn {
+      left: 100%;
+    }
   }
 }
 

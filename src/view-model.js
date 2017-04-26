@@ -10,9 +10,7 @@ export default DefineMap.extend({
   chartData: {
     type: '*',
     set (val) {
-      setTimeout(() => {
-        this.drawChart();
-      }, 0);
+      this.drawChart(val);
       return val;
     }
   },
@@ -85,6 +83,9 @@ export default DefineMap.extend({
       zoomEnd: this.zoomEnd
     });
     this.isInitialized = true;
+    if (this.chartData) {
+      this.drawChart();
+    }
   },
 
   /**

@@ -92,13 +92,13 @@ function getChartWidth(){
 function refreshChart() {
   var cw = getChartWidth();
 
-  $('#preview-container, #preview-canvas, #chart-canvas, #canvas-container')
+  $('#preview-container, #preview-canvas, #chart-canvas, .chart-canvas-container')
     .attr({width: cw})
     .css({width: cw});
 
   var scale = window.devicePixelRatio;
 
-  $('#canvas-container').css('height',ch + 'px');
+  $('.chart-canvas-container').css('height',ch + 'px');
   $('#chart-canvas').attr({height: ch * scale, width: cw * scale}).css('height',ch + 'px');
   $('#preview-canvas').attr({height: zh * scale, width: cw * scale});
 
@@ -302,7 +302,7 @@ export function initPreview() {
 }
 
 function updateChartCanvasWidth() {
-  chartCanvasWidth = $('#canvas-container').width();
+  chartCanvasWidth = $('.chart-canvas-container').width();
 }
 
 export function resizeCharts() {
@@ -323,11 +323,11 @@ export function resizeCharts() {
 
 function initChartMouseover() {
   // Main Chart
-  $('#canvas-container').on('mousemove', function (e) {
+  $('.chart-canvas-container').on('mousemove', function (e) {
     if (!detectArray){
       return;
     }
-    var posX = e.pageX - this.offsetLeft - $("#canvas-container").offset().left;
+    var posX = e.pageX - this.offsetLeft - $(".chart-canvas-container").offset().left;
     for (var c = 0; c < detectArray.length; c++) {
       var info = detectArray[c];
       var gap = info.right - info.left;
@@ -359,7 +359,7 @@ function initChartMouseover() {
       crosshairH = detectArray[detectArray.length-1].left + (gap/3) - 0.5;
 
     var l = e.pageX - 160;
-    var crosshairV = e.pageY - $("#canvas-container").offset().top - 3;
+    var crosshairV = e.pageY - $(".chart-canvas-container").offset().top - 3;
     var linePosText;
 
     if (crosshairV<=mainChartHeight){
@@ -386,7 +386,7 @@ function initChartMouseover() {
     }
 
   });
-  $('#canvas-container').mouseout(function() {
+  $('.chart-canvas-container').mouseout(function() {
     chartHoverInfo.isVisible = false;
     $('#indicatorInfo').css('display', 'none');
     $('#crosshairHInfo').css('display', 'none');
