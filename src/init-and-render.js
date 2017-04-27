@@ -140,8 +140,8 @@ function refreshChart() {
 // }
 
 function deactivateCurrentZoomButton() {
-  $('.zoom .chartButtonActive').blur();
-  $('.zoom .chartButtonActive').removeClass('chartButtonActive');
+  $('.zoom .active').blur();
+  $('.zoom .active').removeClass('active');
 }
 
 export function initPreview() {
