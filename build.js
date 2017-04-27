@@ -11,5 +11,11 @@ stealTools.export({
       sourceMaps: false,
       minify: true
     }
+    // template: {
+    //   modules: ['candlestick-volume-chart/template.stache'],
+    //   format: 'cjs',
+    //   dest: __dirname + '/dist/template2.js',
+    //   minify: true
+    // }
   }
 });
