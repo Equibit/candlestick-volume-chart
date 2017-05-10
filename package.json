@@ -6,7 +6,7 @@
   "homepage": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EDC/candlestick-volume-chart.git"
+    "url": "git+https://github.com/Equibit/candlestick-volume-chart.git"
   },
   "author": {
     "name": "EDC",
