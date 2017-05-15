@@ -70,7 +70,23 @@ export default DefineMap.extend({
     })
   },
 
-  /**
+	/**
+   * @property {String} zoomLabel
+   * Text label for zoom controls
+	 */
+	zoomLabel: {
+	  value: 'Zoom'
+  },
+
+	/**
+   * @property {String} candlestickLabel
+   * Text label for candlestick size controls
+	 */
+	candlestickLabel: {
+	  value: 'Candlesticks'
+  },
+
+	/**
    * @function initChart
    * Initializes chart (size, mouse events, etc).
    */
