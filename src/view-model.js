@@ -27,7 +27,10 @@ export default DefineMap.extend({
    */
   colors: {
     type: '*',
-    value: colors
+    value: colors,
+    set (val) {
+      return Object.assign(colors, val);
+    }
   },
 
   /**
@@ -87,6 +90,30 @@ export default DefineMap.extend({
   },
 
 	/**
+	 * @property {String} dateFormat
+	 * String format for MomentJS, the date of X-axis tick.
+	 */
+	dateFormat: {
+	  value: 'MMMM D'
+  },
+
+	/**
+	 * @property {String} timeFormat
+	 * String format for MomentJS, the time of X-axis tick.
+	 */
+	timeFormat: {
+	  value: 'hh:mm A'
+  },
+
+	/**
+	 * @property {String} fontFamily
+	 * Font family for Y-axis.
+	 */
+	fontFamily: {
+	  value: 'Arial'
+  },
+
+	/**
    * @function initChart
    * Initializes chart (size, mouse events, etc).
    */
@@ -96,7 +123,10 @@ export default DefineMap.extend({
       height: this.chartHeight,
       chartHoverInfo: this.chartHoverInfo,
       zoomStart: this.zoomStart,
-      zoomEnd: this.zoomEnd
+      zoomEnd: this.zoomEnd,
+			fontFamily: this.fontFamily,
+			dateFormat: this.dateFormat,
+			timeFormat: this.timeFormat
     });
     this.isInitialized = true;
     if (this.chartData) {

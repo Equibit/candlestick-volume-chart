@@ -18,7 +18,7 @@ var shft;
 var lineRangeTop;
 var lineRangeBottom;
 
-export default function draw (canvasId, data, left, right, candlestickPeriod, colors, mobile = false) {
+export default function draw (canvasId, data, left, right, candlestickPeriod, options, mobile = false) {
   if (!data) {
     return false;
   }
@@ -76,7 +76,7 @@ export default function draw (canvasId, data, left, right, candlestickPeriod, co
   //trace(canvasId + ' w = ' + width + ', h = ' + height + ' ; d=' +dark);
 
   // Colors:
-  let { borderColor, wickColor, textColor, lineColor, volumeColor, greenColor, redColor } = colors;
+  let { borderColor, wickColor, textColor, lineColor, volumeColor, greenColor, redColor } = options.colors;
 
   if (right > 1) right = 1;
   if (left >= right)left = right - 0.001;
@@ -92,7 +92,7 @@ export default function draw (canvasId, data, left, right, candlestickPeriod, co
   var returnArray = new Array();
   var detectArray = new Array();
   var size = Math.floor(10 * scaleFactor);
-  ctx.font = size + "px Arial";
+  ctx.font = size + "px " + options.fontFamily;
   ctx.clearRect(0, 0, width, height);
   if (data.length < 2) {
     ctx.fillStyle = textColor;
@@ -148,7 +148,7 @@ export default function draw (canvasId, data, left, right, candlestickPeriod, co
 
   // Draw dates on X-axis:
   drawXDates(ctx, data, start, end, sticksPerTimestamp, borderColor, marginLeft,
-    candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor);
+    candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor, options);
 
   // Draw Y-axis:
   var { lineBottom, paddingBottom } = drawYLabels(ctx, scaleFactor, vScale, step, height, width, top, bottom,
@@ -240,7 +240,7 @@ export default function draw (canvasId, data, left, right, candlestickPeriod, co
 }
 
 function drawXDates (ctx, data, start, end, sticksPerTimestamp, lineColor, marginLeft,
-                     candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor) {
+                     candleWidth, candleSpacing, height, textColor, dateMargin, scaleFactor, options) {
   let count = 0;
   let lineCount = 0;
   let timestampCount = sticksPerTimestamp;
@@ -267,8 +267,8 @@ function drawXDates (ctx, data, start, end, sticksPerTimestamp, lineColor, margi
       // show date on every 2nd vertical marks till there are less than 8 marks:
       if (lineCount % 2 === 1 || end - start < 8) {
         let momentDate = moment(new Date(data[i].date * 1000));
-        let date = momentDate.format('MMMM D');
-        let time = momentDate.format('hh:mm A');
+        let date = momentDate.format(options.dateFormat);
+        let time = momentDate.format(options.timeFormat);
         ctx.fillStyle = textColor;
         ctx.fillText(date, x, dateH);
         ctx.fillText(time, x, timeH);
