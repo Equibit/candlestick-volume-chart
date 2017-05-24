@@ -108,7 +108,6 @@ export default function draw (canvasId, data, left, right, candlestickPeriod, co
       'close': 0.0,
       'volume': 0.0,
       'quoteVolume': 0.0,
-      'weightedAverage': 0.0,
       'date': 'N/A'
     };
     returnArray['detectArray'] = detectArray;
@@ -220,7 +219,6 @@ export default function draw (canvasId, data, left, right, candlestickPeriod, co
       'close': close,
       'volume': volume,
       'quoteVolume': data[i].quoteVolume,
-      'weightedAverage': data[i].weightedAverage,
       'date': date
     };
     count++;
