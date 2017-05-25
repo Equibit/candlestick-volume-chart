@@ -2,7 +2,9 @@ import 'jquery-ui/ui/widgets/draggable';
 import draw from './draw';
 import preview from './preview';
 
-let colors;
+// Main options:
+let options;
+
 let ch = 200;
 let zh = 50;
 let chartHoverInfo;
@@ -55,7 +57,7 @@ export function chartSnapZoom(hours) {
     'width': (right - left) + handleWidth
   });
 
-  returnArray = draw('chart-canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
+  returnArray = draw('chart-canvas', chartData, leftPercent, rightPercent, candlestickPeriod, options);
 
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
@@ -70,7 +72,7 @@ export function chartSnapZoom(hours) {
 }
 
 function changeCandlestickZoom(leftPercent, rightPercent) {
-  returnArray = draw('chart-canvas', chartData, leftPercent, rightPercent, candlestickPeriod, colors);
+  returnArray = draw('chart-canvas', chartData, leftPercent, rightPercent, candlestickPeriod, options);
   detectArray = returnArray['detectArray'];
   chartRangeTop = returnArray.rangeTop;
   chartRangeBottom = returnArray.rangeBottom;
@@ -105,7 +107,7 @@ function refreshChart() {
   changeCandlestickZoom(chartLeftPercent, chartRightPercent);
 
   // The bottom Zoom control (preview of all data):
-  preview('preview-canvas', chartData, handleWidth, colors);
+  preview('preview-canvas', chartData, handleWidth, options.colors);
 }
 
 // function changecandlestickPeriod(candlestickPeriod) {
@@ -401,18 +403,19 @@ function initChartMouseover() {
  *
  * @param options
  */
-export function init (options) {
-  colors = options.colors;
-  ch = options.height;
-  chartHoverInfo = options.chartHoverInfo;
-  chartLeftPercent = options.zoomStart;
-  chartRightPercent = options.zoomEnd;
+export function init (opts) {
+  options = opts;
+
+  ch = opts.height;
+  chartHoverInfo = opts.chartHoverInfo;
+  chartLeftPercent = opts.zoomStart;
+  chartRightPercent = opts.zoomEnd;
 
   handleWidth = $('#chartBoundsLeft').width();
   updateChartCanvasWidth();
   initChartMouseover();
 
-  $(window).resize(function(){resizeCharts();});
+  $(window).resize(function(){ resizeCharts(); });
 }
 
 export default function render (data) {

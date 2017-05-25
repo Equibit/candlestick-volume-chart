@@ -5,7 +5,9 @@
 
   <candlestick-volume-chart {chart-data}="chartData"
                             {(candlestick-size)}="candlestickSize"
-                            {chart-height}="chartHeight" />
+                            {chart-height}="chartHeight"
+                            {colors}="colors"
+                            font-family="sans-serif" />
 </script>
 
 <script src="../../node_modules/steal/steal.js"
@@ -24,6 +26,12 @@
     },
     chartHeight: {
       value: 250
+    },
+    colors: {
+    	type: '*',
+    	value: {
+				redColor: '#EC2F39'
+      }
     },
     candlestickSize: {
       set (val) {
