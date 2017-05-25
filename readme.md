@@ -3,7 +3,7 @@ Candlestick and Volume Chart
 
 A canvas based candlestick chart implemented as CanJS component. Built with StealJS.
 
-![Demo](./demo.png)
+![Demo](https://source.tonicdev.net/raw-npm/candlestick-volume-chart/demo.png?t=14956952712671)
 
 To try out the demo open the following file in browser: `/demo/demo.html`.
 
