@@ -1,6 +1,6 @@
 {
   "name": "candlestick-volume-chart",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/candlestick-volume-chart.js",
   "description": "Candlestick-volume chart",
   "homepage": "",
