@@ -36,7 +36,7 @@
 
   <div class="chart-controls">
     <div class="zoom">
-      <label>{{zoomLabel}}</label>
+      <div><label>{{zoomLabel}}</label></div>
       <div class="btn-group">
         <button class="btn btn-default btn-xs  {{#is zoom 6}}active{{/is}}" ($click)="zoomTo(6)">6h</button>
         <button class="btn btn-default btn-xs  {{#is zoom 24}}active{{/is}}" ($click)="zoomTo(24)">24h</button>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="candlestick-controls">
-      <label>{{candlestickLabel}}</label>
+      <div><label>{{candlestickLabel}}</label></div>
       <div class="btn-group">
         <button class="btn btn-default btn-xs  {{#is candlestickSize 300}}active{{/is}}" ($click)="sizeTo(300)">5min</button>
         <button class="btn btn-default btn-xs  {{#is candlestickSize 900}}active{{/is}}" ($click)="sizeTo(900)">15min</button>
